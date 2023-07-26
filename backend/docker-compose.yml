@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15.3-alpine
+    container_name: blog_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: my_database
+      POSTGRES_USER: my_username
+      POSTGRES_PASSWORD: my_password
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  mongodb:
+    image: mongo:6.0.8
+    container_name: blog_mongodb
+    restart: always
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+
+volumes:
+  pg_data:
+  mongo_data:
