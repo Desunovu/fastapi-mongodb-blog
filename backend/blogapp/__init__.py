@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from strawberry.asgi import GraphQL
 
-from backend.blogapp.core.graphql_api import schema
+from .core.graphql_api import schema
 
 
 def create_app():
