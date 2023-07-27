@@ -1,17 +1,14 @@
-# Development of a Blog using FastAPI, SQLAlchemy, and Strawberry
+# Blog development using Fast API and MongoDB
 
 ## Description
 
-The objective of this educational endeavor is to create a blog through the implementation of contemporary technologies, tailored for crafting web applications in the Python language.
-
+The purpose of this educational project is to create a blog using technologies for creating web applications in Python.
 ## Technology Stack
 
 - **Programming Language**: Python
 - **Web Frameworks**: FastAPI
-- **ORM**: SQLAlchemy
-- **GraphQL API**: Strawberry
-- **Database**: MongoDB, PostgreSQL
-- **Frontend**: React
+- **Database**: MongoDB
+- **Frontend**: _Not selected yet_
 
 ## Project Functionality
 
