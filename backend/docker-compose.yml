@@ -1,14 +1,39 @@
 version: '3.9'
-
 services:
+  # FastAPI Blog app
+  blogapp:
+    image: blogapp
+    container_name: blog_app
+    environment:
+      MONGODB_URL: ${MONGODB_URL:-mongodb://mongodb:27017}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    networks:
+      - custom
+    depends_on:
+      - mongodb
+
+  # MongoDB
   mongodb:
     image: mongo:6.0.8
     container_name: blog_mongodb
     restart: always
-    volumes:
-      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-}
     ports:
       - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - custom
 
 volumes:
   mongo_data:
+
+networks:
+  custom:
+    driver: bridge
