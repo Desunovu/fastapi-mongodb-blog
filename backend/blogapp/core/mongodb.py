@@ -1,17 +1,17 @@
-import os
-
+from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
-from starlette.requests import Request
 
-# Определение констант из переменных окружения
-MONGODB_URL = os.environ.get("MONGODB_URL")
-MONGODB_DATABASE = os.environ.get("MONGODB_DATABASE")
-
-# Motor client
-mongo_client = AsyncIOMotorClient(MONGODB_URL)
+from .config import MONGODB_URL, MONGODB_DATABASE
+from ..modules.articles.model import Article
+from ..modules.authentication.model import User
+from ..modules.comments.model import Comment
+from ..modules.tags.model import Tag
 
 
-# Возвращение клиента с указанием нужной базы
-def get_mongodb_client(request: Request) -> AsyncIOMotorClient:
-    print(MONGODB_DATABASE, MONGODB_URL)
-    return request.app.state.mongo_client[MONGODB_DATABASE]
+# Init beanie ODM
+async def init_odm():
+    mongo_client = AsyncIOMotorClient(MONGODB_URL)
+    await init_beanie(
+        database=mongo_client[MONGODB_DATABASE],
+        document_models=[Article, User, Comment, Tag]
+    )
