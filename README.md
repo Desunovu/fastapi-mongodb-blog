@@ -1,17 +1,16 @@
-# Development of a Blog using FastAPI, SQLAlchemy, and Strawberry
+# Blog development using Fast API and MongoDB
 
 ## Description
 
-The objective of this educational endeavor is to create a blog through the implementation of contemporary technologies, tailored for crafting web applications in the Python language.
+Educational project on developing a blog. The main goal of the project is to utilize a NoSQL database and implement asynchronous CRUD operations.
 
 ## Technology Stack
 
 - **Programming Language**: Python
 - **Web Frameworks**: FastAPI
-- **ORM**: SQLAlchemy
-- **GraphQL API**: Strawberry
-- **Database**: MongoDB, PostgreSQL
-- **Frontend**: React
+- **Database**: MongoDB (Motor async driver & Beanie ODM)
+- **Frontend**: _Not selected yet_
+- **Honorable mention**: JWT Auth
 
 ## Project Functionality
 
@@ -25,5 +24,5 @@ The objective of this educational endeavor is to create a blog through the imple
 
 ## Project Implementation Steps
 
-Here is the link to the Milestones for the project "fastapi-strawberry-blog" on GitHub:
-[Milestones](https://github.com/Desunovu/fastapi-strawberry-blog/milestones)
+Here is the link to the Milestones:
+[Milestones](https://github.com/Desunovu/fastapi-mongodb-blog/milestones)
