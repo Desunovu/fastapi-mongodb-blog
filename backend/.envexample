@@ -1,0 +1,10 @@
+# Если при запуске переменные не будут заданы, то они возьмутся из этого файла
+
+# Для сервиса Blog app
+#MONGODB_URL=mongodb://myrootuser:myrootpassword@localhost:27017/?authMechanism=DEFAULT
+MONGODB_URL=mongodb://localhost:27017
+MONGODB_DATABASE=blogdatabase
+
+# Для сервиса MongoDB
+MONGO_INITDB_ROOT_USERNAME=myrootuser
+MONGO_INITDB_ROOT_PASSWORD=myrootpassword
