@@ -2,13 +2,15 @@
 
 ## Description
 
-The purpose of this educational project is to create a blog using technologies for creating web applications in Python.
+Educational project on developing a blog. The main goal of the project is to utilize a NoSQL database and implement asynchronous CRUD operations.
+
 ## Technology Stack
 
 - **Programming Language**: Python
 - **Web Frameworks**: FastAPI
-- **Database**: MongoDB
+- **Database**: MongoDB (Motor async driver & Beanie ODM)
 - **Frontend**: _Not selected yet_
+- **Honorable mention**: JWT Auth
 
 ## Project Functionality
 
@@ -22,5 +24,5 @@ The purpose of this educational project is to create a blog using technologies f
 
 ## Project Implementation Steps
 
-Here is the link to the Milestones for the project "fastapi-strawberry-blog" on GitHub:
-[Milestones](https://github.com/Desunovu/fastapi-strawberry-blog/milestones)
+Here is the link to the Milestones:
+[Milestones](https://github.com/Desunovu/fastapi-mongodb-blog/milestones)
