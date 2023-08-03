@@ -3,7 +3,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 from .config import MONGODB_URL, MONGODB_DATABASE
 from ..modules.articles.model import Article
-from ..modules.authentication.model import User
+from ..modules.users.model import User
 from ..modules.comments.model import Comment
 from ..modules.tags.model import Tag
 

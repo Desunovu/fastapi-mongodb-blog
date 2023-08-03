@@ -10,5 +10,10 @@ dotenv_path = os.path.join(
 load_dotenv_result = load_dotenv(dotenv_path=dotenv_path)
 
 # Определение констант из переменных окружения
+SECRET_KEY = os.getenv("SECRET_KEY")
 MONGODB_URL = os.getenv("MONGODB_URL", "")
 MONGODB_DATABASE = os.getenv("MONGODB_DATABASE")
+
+# Прочие константы
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
