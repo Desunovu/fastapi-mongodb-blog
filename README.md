@@ -7,10 +7,10 @@ Educational project on developing a blog. The main goal of the project is to uti
 ## Technology Stack
 
 - **Programming Language**: Python
-- **Web Frameworks**: FastAPI
+- **Web Framework**: FastAPI
 - **Database**: MongoDB (Motor async driver & Beanie ODM)
 - **Frontend**: _Not selected yet_
-- **Honorable mention**: JWT Auth
+- **Honorable mention**: OAuth 2.0 JWT
 
 ## Project Functionality
 
