@@ -2,7 +2,7 @@ from datetime import datetime
 
 from beanie import Document, Link
 
-from ..authentication.model import User
+from ..users.model import User
 
 
 class Comment(Document):

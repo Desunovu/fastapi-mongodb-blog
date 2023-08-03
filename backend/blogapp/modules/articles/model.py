@@ -3,7 +3,7 @@ from typing import List, Optional
 
 from beanie import Document, Link
 
-from ..authentication.model import User
+from ..users.model import User
 from ..tags.model import Tag
 
 
