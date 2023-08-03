@@ -3,17 +3,19 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from .tags.model import Tag
-from ..core.oauth import oauth2_scheme
+from .users.model import User
+from ..core.security.utilities import get_active_current_user
 
 router = APIRouter(
     prefix="/test"
 )
 
 
-@router.get("/test_token/")
-async def test_token(token: Annotated[str, Depends(oauth2_scheme)]):
-
-    return {"token": token}
+@router.get("/users/me")
+async def test_users(
+    current_user: Annotated[User, Depends(get_active_current_user)]
+):
+    return current_user
 
 
 @router.post("/add_some_documents")

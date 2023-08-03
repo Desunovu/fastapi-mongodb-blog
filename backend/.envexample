@@ -1,8 +1,8 @@
 # Если при запуске переменные не будут заданы, то они возьмутся из этого файла
 
 # Для сервиса Blog app
-#MONGODB_URL=mongodb://myrootuser:myrootpassword@localhost:27017/?authMechanism=DEFAULT
-MONGODB_URL=mongodb://localhost:27017
+SECRET_KEY=0000000000000000000000000000000A  # random-32-digit-hex-code
+MONGODB_URL=mongodb://localhost:27017  # or mongodb://myrootuser:myrootpassword@localhost:27017/?authMechanism=DEFAULT
 MONGODB_DATABASE=blogdatabase
 
 # Для сервиса MongoDB
