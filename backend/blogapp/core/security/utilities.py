@@ -7,6 +7,7 @@ from jose import jwt, JWTError
 from passlib.context import CryptContext
 from starlette import status
 
+from .roles import RolesEnum
 from ..config import ACCESS_TOKEN_EXPIRE_MINUTES, SECRET_KEY, ALGORITHM
 from ...modules.users.model import UserDocument
 
@@ -86,3 +87,17 @@ async def get_active_current_user(
     if current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
+
+
+class RoleChecker:
+    def __init__(self, allowed_role: str = RolesEnum.Reader.value):
+        self.allowed_role = allowed_role
+
+    def __call__(self, current_user: Annotated[
+        UserDocument, Depends(get_active_current_user)]) -> UserDocument:
+        all_roles = RolesEnum.all_roles()
+        if all_roles.index[current_user.role] > all_roles.index[
+            self.allowed_role]:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                                detail="Access forbidden")
+        return current_user
