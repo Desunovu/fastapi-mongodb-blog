@@ -8,8 +8,4 @@ class RolesEnum(str, Enum):
 
     @classmethod
     def all_roles(cls):
-        return [
-            cls.ADMIN.value,
-            cls.Author.value,
-            cls.Reader.value
-        ]
+        return [cls.ADMIN.value, cls.Author.value, cls.Reader.value]
