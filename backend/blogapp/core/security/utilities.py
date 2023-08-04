@@ -85,7 +85,7 @@ async def get_active_current_user(
 
 
 class RoleChecker:
-    def __init__(self, allowed_role: str = RolesEnum.Reader.value):
+    def __init__(self, allowed_role: str = RolesEnum.READER.value):
         self.allowed_role = allowed_role
 
     def __call__(
