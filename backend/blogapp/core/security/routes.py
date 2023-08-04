@@ -8,8 +8,11 @@ from starlette import status
 
 from backend.blogapp.core.security.schema import TokenResponseBody, \
     RegisterRequestBody
-from backend.blogapp.core.security.utilities import authenticate_user, \
-    create_access_token, get_password_hash
+from backend.blogapp.core.security.utilities import (
+    authenticate_user,
+    create_access_token,
+    get_password_hash,
+)
 from backend.blogapp.modules.users.model import UserDocument
 
 router = APIRouter()
@@ -25,18 +28,14 @@ async def login_for_access_token(
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"}
+            headers={"WWW-Authenticate": "Bearer"},
         )
-    access_token = create_access_token(
-        data={"sub": user.username}
-    )
+    access_token = create_access_token(data={"sub": user.username})
     return {"access_token": access_token, "token_type": "bearer"}
 
 
 @router.post("/register", response_model=UserDocument)
-async def register_user(
-        body: RegisterRequestBody
-):
+async def register_user(body: RegisterRequestBody):
     """Создает нового пользователя"""
     # Проверить не занят ли username и email
     existing_user = await UserDocument.find(
@@ -46,7 +45,7 @@ async def register_user(
     if existing_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Username or email already registered"
+            detail="Username or email already registered",
         )
 
     user = UserDocument(
@@ -54,7 +53,7 @@ async def register_user(
         password_hash=get_password_hash(body.password),
         email=body.email,
         disabled=False,
-        created_at=datetime.utcnow()
+        created_at=datetime.utcnow(),
     )
     await UserDocument.insert_one(user)
     return user
