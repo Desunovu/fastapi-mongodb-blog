@@ -10,7 +10,7 @@ from backend.blogapp.core.security.schema import TokenResponseBody, \
     RegisterRequestBody
 from backend.blogapp.core.security.utilities import authenticate_user, \
     create_access_token, get_password_hash
-from backend.blogapp.modules.users.model import User
+from backend.blogapp.modules.users.model import UserDocument
 
 router = APIRouter()
 
@@ -33,14 +33,15 @@ async def login_for_access_token(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@router.post("/register", response_model=User)
+@router.post("/register", response_model=UserDocument)
 async def register_user(
         body: RegisterRequestBody
 ):
     """Создает нового пользователя"""
     # Проверить не занят ли username и email
-    existing_user = await User.find(
-        Or(User.email == body.email, User.username == body.username)
+    existing_user = await UserDocument.find(
+        Or(UserDocument.email == body.email,
+           UserDocument.username == body.username)
     ).first_or_none()
     if existing_user:
         raise HTTPException(
@@ -48,12 +49,12 @@ async def register_user(
             detail="Username or email already registered"
         )
 
-    user = User(
+    user = UserDocument(
         username=body.username,
         password_hash=get_password_hash(body.password),
         email=body.email,
         disabled=False,
         created_at=datetime.utcnow()
     )
-    await User.insert_one(user)
+    await UserDocument.insert_one(user)
     return user

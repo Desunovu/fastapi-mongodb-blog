@@ -2,12 +2,12 @@ from datetime import datetime
 
 from beanie import Document, Link
 
-from ..users.model import User
+from ..users.model import UserDocument
 
 
-class Comment(Document):
+class CommentDocument(Document):
     content: str
-    author: Link[User]
+    author: Link[UserDocument]
     created_at: datetime
     updated_at: datetime
 

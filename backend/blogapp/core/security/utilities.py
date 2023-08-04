@@ -8,7 +8,7 @@ from passlib.context import CryptContext
 from starlette import status
 
 from ..config import ACCESS_TOKEN_EXPIRE_MINUTES, SECRET_KEY, ALGORITHM
-from ...modules.users.model import User
+from ...modules.users.model import UserDocument
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="./token")
@@ -24,13 +24,14 @@ def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
 
-async def get_user_by_username(username: str) -> User | None:
+async def get_user_by_username(username: str) -> UserDocument | None:
     """Получает пользователя из БД по username"""
-    user = await User.find_one(User.username == username)
+    user = await UserDocument.find_one(UserDocument.username == username)
     return user
 
 
-async def authenticate_user(username: str, password: str) -> User | None:
+async def authenticate_user(username: str,
+                            password: str) -> UserDocument | None:
     """Аутентифицирует пользователя по username и password"""
     user = await get_user_by_username(username)
     if not user:
@@ -57,7 +58,7 @@ def create_access_token(
 
 async def get_current_user(
         token: Annotated[str, Depends(oauth2_scheme)]
-) -> User:
+) -> UserDocument:
     """Зависимость - возвращает пользователя по переданному токену"""
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -79,8 +80,8 @@ async def get_current_user(
 
 
 async def get_active_current_user(
-        current_user: Annotated[User, Depends(get_current_user)]
-) -> User:
+        current_user: Annotated[UserDocument, Depends(get_current_user)]
+) -> UserDocument:
     """Зависимость - возвращает активного пользователя"""
     if current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive user")

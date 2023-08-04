@@ -5,7 +5,8 @@ from beanie import Document
 from pydantic import EmailStr
 
 
-class User(Document):
+
+class UserDocument(Document):
     username: str
     password_hash: str
     email: EmailStr

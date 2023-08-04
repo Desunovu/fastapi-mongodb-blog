@@ -1,7 +1,7 @@
 from beanie import Document
 
 
-class Tag(Document):
+class TagDocument(Document):
     name: str
 
     class Settings:
