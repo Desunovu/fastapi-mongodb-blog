@@ -7,8 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from starlette import status
 
-from backend.blogapp.core.security.schema import TokenResponseBody, \
-    RegisterRequestBody
+from backend.blogapp.core.security.schema import TokenResponseBody, RegisterRequestBody
 from backend.blogapp.core.security.utilities import (
     authenticate_user,
     create_access_token,
@@ -21,7 +20,7 @@ router = APIRouter()
 
 @router.post("/token", response_model=TokenResponseBody)
 async def login_for_access_token(
-        form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
 ):
     """Выдает токен доступа аутентифицированному пользователю"""
     user = await authenticate_user(form_data.username, form_data.password)
@@ -40,8 +39,7 @@ async def register_user(body: RegisterRequestBody):
     """Создает нового пользователя"""
     # Проверить не занят ли username и email
     existing_user = await UserDocument.find(
-        Or(Eq(UserDocument.email, body.email),
-           Eq(UserDocument.username, body.username))
+        Or(Eq(UserDocument.email, body.email), Eq(UserDocument.username, body.username))
     ).first_or_none()
     if existing_user:
         raise HTTPException(
