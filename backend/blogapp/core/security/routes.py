@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Annotated
 
+from beanie.odm.operators.find.comparison import Eq
 from beanie.odm.operators.find.logical import Or
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
@@ -39,8 +40,8 @@ async def register_user(body: RegisterRequestBody):
     """Создает нового пользователя"""
     # Проверить не занят ли username и email
     existing_user = await UserDocument.find(
-        Or(UserDocument.email == body.email,
-           UserDocument.username == body.username)
+        Or(Eq(UserDocument.email, body.email),
+           Eq(UserDocument.username, body.username))
     ).first_or_none()
     if existing_user:
         raise HTTPException(
