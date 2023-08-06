@@ -14,13 +14,14 @@ Educational project on developing a blog. The main goal of the project is to uti
 
 ## Project Functionality
 
-- User registration and authentication
-- Creation, editing, and deletion of blog articles
-- Display of article list and their details
-- Adding comments to articles
-- Search for articles using keywords
-- Pagination support for displaying a large number of articles
-- Ability to add tags to articles and filter by tags
+- User registration and authentication :white_check_mark:
+- Hierarchical Role-Based Access Control :white_check_mark:
+- Creation, editing, and deletion of blog articles :x:
+- Display of article list and their details :x:
+- Adding comments to articles :x:
+- Search for articles using keywords :x:
+- Pagination support for displaying a large number of articles :x:
+- Ability to add tags to articles and filter by tags :x:
 
 ## Project Implementation Steps
 
