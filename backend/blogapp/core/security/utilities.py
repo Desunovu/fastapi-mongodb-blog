@@ -85,7 +85,10 @@ async def get_active_current_user(
 
 
 class RoleChecker:
-    """Класс проверки для обеспечения контроля доступа на основе ролей"""
+    """
+    Класс зависимости обеспечения контроля доступа на основе ролей
+    Возвращает UserDocument если проверка успешна
+    """
 
     def __init__(self, allowed_role: str):
         self.allowed_role = allowed_role
@@ -93,13 +96,11 @@ class RoleChecker:
     def __call__(
         self, current_user: Annotated[UserDocument, Depends(get_active_current_user)]
     ) -> UserDocument:
-        """Проверяет имеет ли пользователь досуп к path operation function.
-        Возвращает UserDocument если проверка успешна"""
-
         allowed_role_value = RolesEnum.role_to_value(self.allowed_role)
         user_role_value = RolesEnum.role_to_value(current_user.role)
         if user_role_value < allowed_role_value:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN, detail="Access forbidden"
             )
+
         return current_user
