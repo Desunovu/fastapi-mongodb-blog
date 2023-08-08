@@ -4,25 +4,24 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from .models import ArticleCreate, ArticleResponse, ArticleDocument
-from ..users.model import UserBase
+from ..users.model import UserDocument
 from ...core.security.roles import RolesEnum
-from ...core.security.utilities import RoleChecker, get_user_by_username
+from ...core.security.utilities import RoleChecker
 
 router = APIRouter(prefix="/articles")
 
 
 @router.post("/", response_model=ArticleResponse)
 async def create_article(
-    create_article_body: ArticleCreate,
+    create_article_data: ArticleCreate,
     current_user: Annotated[
-        UserBase, Depends(RoleChecker(allowed_role=RolesEnum.AUTHOR.value))
+        UserDocument, Depends(RoleChecker(allowed_role=RolesEnum.AUTHOR.value))
     ],
 ):
-    print(create_article_body.model_dump())
-    author = await get_user_by_username(current_user.username)
     article = ArticleDocument(
         author=current_user,
         created_at=datetime.utcnow(),
+        **create_article_data.model_dump(),
     )
-    # await ArticleDocument.insert_one(article)
-    return {"article": article.model_dump(exclude={"author"})}
+    await ArticleDocument.insert_one(article)
+    return {"article": article}
