@@ -2,7 +2,7 @@ from logging.config import dictConfig
 
 from pydantic import BaseModel
 
-from .config import LOGS_DIR_PATH, LOG_FILE_PATH
+from .config import LOGS_DIR_PATH, LOG_FILE_PATH, LOGGING_LEVEL
 
 
 # From https://stackoverflow.com/questions/63510041/adding-python-logging-to-fastapi-endpoints-hosted-on-docker-doesnt-display-api
