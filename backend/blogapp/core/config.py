@@ -24,5 +24,9 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 # Вычисление абсолютных путей приложения
 BACKEND_DIR_PATH: Path = Path().parent.parent.absolute()
+
+# LOGGER
+LOGGER_NAME: str = "blogapp"
+LOG_FORMAT: str = "%(levelprefix)s | %(asctime)s | %(message)s"
 LOGS_DIR_PATH: Path = BACKEND_DIR_PATH / "logs"
 LOG_FILE_PATH: Path = LOGS_DIR_PATH / f"""{time.strftime("%Y%m%d-%H%M%S")}.log"""

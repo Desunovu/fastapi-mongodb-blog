@@ -2,17 +2,12 @@ from logging.config import dictConfig
 
 from pydantic import BaseModel
 
-from .config import LOGS_DIR_PATH, LOG_FILE_PATH, LOGGING_LEVEL
+from .config import LOGS_DIR_PATH, LOG_FILE_PATH, LOGGING_LEVEL, LOG_FORMAT, LOGGER_NAME
 
 
 # From https://stackoverflow.com/questions/63510041/adding-python-logging-to-fastapi-endpoints-hosted-on-docker-doesnt-display-api
 class LogConfig(BaseModel):
     """Конфигурация логгера"""
-
-    LOGGER_NAME: str = "blogapp"
-    LOG_FORMAT: str = "%(levelprefix)s | %(asctime)s | %(message)s"
-    LOG_LEVEL: str = "DEBUG"
-    LOGS_DIR: str = LOGS_DIR_PATH
 
     # Logging config
     version = 1
@@ -32,7 +27,7 @@ class LogConfig(BaseModel):
         },
     }
     loggers = {
-        LOGGER_NAME: {"handlers": ["file"], "level": LOG_LEVEL},
+        LOGGER_NAME: {"handlers": ["file"], "level": LOGGING_LEVEL},
     }
 
 
