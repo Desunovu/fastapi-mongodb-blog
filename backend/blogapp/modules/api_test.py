@@ -2,15 +2,15 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
-from .users.model import UserBase
+from .users.model import UserDocument
 from ..core.security.roles import RolesEnum
 from ..core.security.utilities import RoleChecker
 
 router = APIRouter(prefix="/test")
 
 
-@router.get("/users/me", response_model=UserBase)
+@router.get("/users/me")
 async def test_users(
-    current_user: Annotated[UserBase, Depends(RoleChecker(RolesEnum.READER.value))]
+    current_user: Annotated[UserDocument, Depends(RoleChecker(RolesEnum.READER.value))]
 ):
-    return current_user
+    return current_user.model_dump()
