@@ -9,7 +9,7 @@ from starlette import status
 
 from .roles import RolesEnum
 from ..config import ACCESS_TOKEN_EXPIRE_MINUTES, SECRET_KEY, ALGORITHM
-from ...modules.users.model import UserDocument
+from ...modules.users.model import UserDocument, UserBase
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="./token")
@@ -53,10 +53,8 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None) -> s
     return encoded_jwt
 
 
-async def get_current_user(
-    token: Annotated[str, Depends(oauth2_scheme)]
-) -> UserDocument:
-    """Зависимость - возвращает пользователя по переданному токену"""
+async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]) -> UserBase:
+    """Зависимость - возвращает UserBase по переданному токену"""
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -72,12 +70,12 @@ async def get_current_user(
     user = await get_user_by_username(username)
     if not user:
         raise credentials_exception
-    return user
+    return UserBase.parse_obj(user.dict())
 
 
 async def get_active_current_user(
-    current_user: Annotated[UserDocument, Depends(get_current_user)]
-) -> UserDocument:
+    current_user: Annotated[UserBase, Depends(get_current_user)]
+) -> UserBase:
     """Зависимость - возвращает активного пользователя"""
     if current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive user")
@@ -87,15 +85,15 @@ async def get_active_current_user(
 class RoleChecker:
     """
     Класс зависимости обеспечения контроля доступа на основе ролей.
-    Возвращает UserDocument если проверка успешна
+    Возвращает UserBase если проверка успешна
     """
 
     def __init__(self, allowed_role: str):
         self.allowed_role = allowed_role
 
     def __call__(
-        self, current_user: Annotated[UserDocument, Depends(get_active_current_user)]
-    ) -> UserDocument:
+        self, current_user: Annotated[UserBase, Depends(get_active_current_user)]
+    ) -> UserBase:
         allowed_role_value = RolesEnum.role_to_value(self.allowed_role)
         user_role_value = RolesEnum.role_to_value(current_user.role)
         if user_role_value < allowed_role_value:

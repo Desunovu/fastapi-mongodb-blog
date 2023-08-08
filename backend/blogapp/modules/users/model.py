@@ -6,7 +6,7 @@ from pydantic import EmailStr, BaseModel
 from ...core.security.roles import RolesEnum
 
 
-class UserBaseModel(BaseModel):
+class UserBase(BaseModel):
     """Базовая модель пользователя"""
 
     username: str
@@ -17,7 +17,7 @@ class UserBaseModel(BaseModel):
     updated_at: datetime | None = None
 
 
-class UserDocument(UserBaseModel, Document):
+class UserDocument(UserBase, Document):
     password_hash: str
 
     class Settings:
