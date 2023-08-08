@@ -1,9 +1,8 @@
-import time
 from logging.config import dictConfig
 
 from pydantic import BaseModel
 
-from .config import LOGS_DIR_PATH
+from .config import LOGS_DIR_PATH, LOG_FILE_PATH
 
 
 # From https://stackoverflow.com/questions/63510041/adding-python-logging-to-fastapi-endpoints-hosted-on-docker-doesnt-display-api
@@ -29,7 +28,7 @@ class LogConfig(BaseModel):
         "file": {
             "class": "logging.handlers.RotatingFileHandler",
             "formatter": "default",
-            "filename": LOGS_DIR_PATH / f"""{time.strftime("%Y%m%d-%H%M%S")}.log""",
+            "filename": LOG_FILE_PATH,
         },
     }
     loggers = {
