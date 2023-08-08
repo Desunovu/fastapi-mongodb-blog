@@ -4,7 +4,6 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from .config import MONGODB_URL, MONGODB_DATABASE
 from ..modules.articles.model import ArticleDocument
 from ..modules.comments.model import CommentDocument
-from ..modules.tags.model import TagDocument
 from ..modules.users.model import UserDocument
 
 
@@ -13,5 +12,9 @@ async def init_odm():
     mongo_client = AsyncIOMotorClient(MONGODB_URL)
     await init_beanie(
         database=mongo_client[MONGODB_DATABASE],
-        document_models=[ArticleDocument, UserDocument, CommentDocument, TagDocument],
+        document_models=[
+            ArticleDocument,
+            UserDocument,
+            CommentDocument,
+        ],
     )
