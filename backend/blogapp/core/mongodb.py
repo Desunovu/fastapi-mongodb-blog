@@ -13,6 +13,5 @@ async def init_odm():
     mongo_client = AsyncIOMotorClient(MONGODB_URL)
     await init_beanie(
         database=mongo_client[MONGODB_DATABASE],
-        document_models=[ArticleDocument, UserDocument, CommentDocument,
-                         TagDocument]
+        document_models=[ArticleDocument, UserDocument, CommentDocument, TagDocument],
     )
