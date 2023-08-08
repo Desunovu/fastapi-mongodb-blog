@@ -25,4 +25,3 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 BACKEND_DIR_PATH: Path = Path().parent.parent.absolute()
 LOGS_DIR_PATH: Path = BACKEND_DIR_PATH / "logs"
 LOG_FILE_PATH: Path = LOGS_DIR_PATH / f"""{time.strftime("%Y%m%d-%H%M%S")}.log"""
-pass
