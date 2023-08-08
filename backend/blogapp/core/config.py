@@ -14,6 +14,7 @@ load_dotenv_result = load_dotenv(dotenv_path=dotenv_path)
 
 # Определение констант из переменных окружения
 SECRET_KEY = os.getenv("SECRET_KEY")
+LOGGING_LEVEL = os.getenv("LOGGING_LEVEL")
 MONGODB_URL = os.getenv("MONGODB_URL", "")
 MONGODB_DATABASE = os.getenv("MONGODB_DATABASE")
 
