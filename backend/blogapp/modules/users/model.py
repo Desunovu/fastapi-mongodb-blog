@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from beanie import Document
-from pydantic import EmailStr, BaseModel
+from pydantic import EmailStr, BaseModel, Field
 
 from ...core.security.roles import RolesEnum
 
@@ -18,7 +18,7 @@ class UserBase(BaseModel):
 
 
 class UserDocument(UserBase, Document):
-    password_hash: str
+    password_hash: str = Field(exclude=True)
 
     class Settings:
         name = "users"
