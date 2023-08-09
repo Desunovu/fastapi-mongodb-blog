@@ -13,4 +13,4 @@ router = APIRouter(prefix="/test")
 async def test_users(
     current_user: Annotated[UserDocument, Depends(RoleChecker(RolesEnum.READER.value))]
 ):
-    return current_user.model_dump()
+    return current_user.dict()

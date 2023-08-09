@@ -7,12 +7,18 @@ from ..users.model import UserDocument
 
 
 class ArticleBase(BaseModel):
+    title: str | None
+    content: str | None
+    tags: list[str] | None
+    created_at: datetime | None
+    updated_at: datetime | None
+    author: dict | None
+
+
+class ArticleDocument(Document, ArticleBase):
     title: str | None = None
     content: str | None = None
     tags: list[str] | None = None
-
-
-class ArticleDocument(ArticleBase, Document):
     created_at: datetime | None = None
     updated_at: datetime | None = None
     author: Link[UserDocument] | None = None
@@ -21,7 +27,11 @@ class ArticleDocument(ArticleBase, Document):
         name = "articles"
 
 
-class ArticleCreate(ArticleBase):
+class ArticleCreateOrUpdate(BaseModel):
+    title: str | None = None
+    content: str | None = None
+    tags: list[str] | None = None
+
     model_config = {
         "json_schema_extra": {
             "examples": [
@@ -35,9 +45,5 @@ class ArticleCreate(ArticleBase):
     }
 
 
-class ArticleUpdate(ArticleBase):
-    pass
-
-
 class ArticleResponse(BaseModel):
-    article: ArticleDocument
+    article: ArticleBase

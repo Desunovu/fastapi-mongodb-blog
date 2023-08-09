@@ -11,14 +11,20 @@ class UserBase(BaseModel):
 
     username: str
     email: EmailStr
+    role: RolesEnum | None
+    disabled: bool | None
+    created_at: datetime | None
+    updated_at: datetime | None
+
+
+class UserDocument(Document, UserBase):
+    username: str
+    email: EmailStr
     role: RolesEnum | None = None
     disabled: bool | None = None
     created_at: datetime | None = None
     updated_at: datetime | None = None
-
-
-class UserDocument(UserBase, Document):
-    password_hash: str = Field(exclude=True)
+    password_hash: str | None = Field(default=None, exclude=True)
 
     class Settings:
         name = "users"
