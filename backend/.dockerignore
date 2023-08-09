@@ -1,0 +1,6 @@
+*
+!blogapp
+!tests
+!.envexample
+!pyproject.toml
+!poetry.lock

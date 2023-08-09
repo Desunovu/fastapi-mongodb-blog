@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "fastapi-mongodb-blog-backend"
+version = "0.1.0"
+description = "Educational project on developing a blog using Fast API, MongoDB, and other technologies."
+license = "MIT"
+authors = ["desunovu <desunovu@gmail.com>"]
+readme = "../README.md"
+repository = "https://github.com/Desunovu/fastapi-mongodb-blog"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+python-dotenv = "^1.0.0"
+uvicorn = "^0.23.2"
+beanie = "^1.21.0"
+email-validator = "^2.0.0.post2"
+fastapi = "^0.101.0"
+python-multipart = "^0.0.6"
+passlib = "^1.7.4"
+bcrypt = "^4.0.1"
+python-jose = "^3.3.0"
+cryptography = "^41.0.3"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.7.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
