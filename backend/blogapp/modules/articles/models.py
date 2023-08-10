@@ -6,16 +6,7 @@ from pydantic import BaseModel
 from ..users.model import UserDocument
 
 
-class ArticleBase(BaseModel):
-    title: str | None
-    content: str | None
-    tags: list[str] | None
-    created_at: datetime | None
-    updated_at: datetime | None
-    author: dict | None
-
-
-class ArticleDocument(Document, ArticleBase):
+class ArticleDocument(Document):
     title: str | None = None
     content: str | None = None
     tags: list[str] | None = None
@@ -46,4 +37,4 @@ class ArticleCreateOrUpdate(BaseModel):
 
 
 class ArticleResponse(BaseModel):
-    article: ArticleBase
+    article: ArticleDocument

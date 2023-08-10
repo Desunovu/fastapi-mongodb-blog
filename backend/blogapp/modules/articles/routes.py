@@ -3,7 +3,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
-from .models import ArticleCreateOrUpdate, ArticleResponse, ArticleDocument, ArticleBase
+from .models import ArticleCreateOrUpdate, ArticleResponse, ArticleDocument
 from ..users.model import UserDocument
 from ...core.security.roles import RolesEnum
 from ...core.security.utilities import RoleChecker
@@ -24,4 +24,4 @@ async def create_article(
         **article_data.model_dump(),
     )
     await ArticleDocument.insert_one(article)
-    return {"article": ArticleBase(**article.dict())}
+    return {"article": article}
