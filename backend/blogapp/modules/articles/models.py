@@ -2,10 +2,13 @@ from datetime import datetime
 from typing import Annotated
 
 from beanie import Link
+from fastapi import HTTPException
 from pydantic import BaseModel, model_validator, Field
+from starlette import status
 
 from ..users.model import UserDocument
 from ...core.database.extended_document import ExtendedDocument
+from ...core.security.roles import RolesEnum
 
 
 class ArticleDocument(ExtendedDocument):
@@ -18,6 +21,17 @@ class ArticleDocument(ExtendedDocument):
 
     class Settings:
         name = "articles"
+
+    def can_modify_article(self, user: UserDocument):
+        """
+        Может ли пользователь редактировать статью.
+        :param user: UserDocument
+        :return: True
+        :raise HTTPException 403: Если нет прав на изменение
+        """
+        if user.role == RolesEnum.ADMIN or self.author.id == user.id:
+            return True
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden")
 
 
 class ArticleCreateOrUpdate(BaseModel):
