@@ -1,11 +1,12 @@
 from datetime import datetime
 
-from beanie import Document, Link
+from beanie import Link
 
 from ..users.model import UserDocument
+from ...core.database.extended_document import ExtendedDocument
 
 
-class CommentDocument(Document):
+class CommentDocument(ExtendedDocument):
     content: str
     author: Link[UserDocument]
     created_at: datetime

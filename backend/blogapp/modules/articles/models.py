@@ -4,9 +4,10 @@ from beanie import Document, Link
 from pydantic import BaseModel, model_validator
 
 from ..users.model import UserDocument
+from ...core.database.extended_document import ExtendedDocument
 
 
-class ArticleDocument(Document):
+class ArticleDocument(ExtendedDocument):
     title: str | None = None
     content: str | None = None
     tags: list[str] | None = None

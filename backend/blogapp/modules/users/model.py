@@ -1,12 +1,12 @@
 from datetime import datetime
 
-from beanie import Document
 from pydantic import EmailStr, Field
 
+from ...core.database.extended_document import ExtendedDocument
 from ...core.security.roles import RolesEnum
 
 
-class UserDocument(Document):
+class UserDocument(ExtendedDocument):
     username: str
     email: EmailStr
     role: RolesEnum | None = None
