@@ -6,7 +6,7 @@ from ..users.model import UserDocument
 from ...core.security.roles import RolesEnum
 
 
-def can_modify_article(article: ArticleDocument, user: UserDocument):
+def check_user_can_modify_article(article: ArticleDocument, user: UserDocument):
     """
     Проверяет может ли пользователь редактировать статью.
     :return: True
