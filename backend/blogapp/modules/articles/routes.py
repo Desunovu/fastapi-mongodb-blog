@@ -56,7 +56,7 @@ async def update_article(
     # Получить документ статьи
     article = await ArticleDocument.get_or_404(document_id=article_id, fetch_links=True)
     # Проверить права редактирования
-    check_user_can_modify_article(article=article, user=current_user)
+    _current_user = check_user_can_modify_article(article=article, user=current_user)
     # Обновить поля и сохранить документ
     article = article.model_copy(update=article_data.model_dump(exclude_unset=True))
     article.updated_at = datetime.utcnow()

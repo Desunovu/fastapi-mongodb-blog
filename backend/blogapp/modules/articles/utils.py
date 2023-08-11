@@ -6,12 +6,15 @@ from ..users.model import UserDocument
 from ...core.security.roles import RolesEnum
 
 
-def check_user_can_modify_article(article: ArticleDocument, user: UserDocument):
+def check_user_can_modify_article(
+    article: ArticleDocument, user: UserDocument
+) -> UserDocument:
     """
     Проверяет может ли пользователь редактировать статью.
-    :return: True
-    :raise HTTPException 403: Если нет прав на изменение
+    :return: UserDocument
+    :raise HTTPException: если нет прав на изменение
     """
+    # Разрешить администратору или владельцу
     if user.role == RolesEnum.ADMIN or article.author.id == user.id:
-        return True
+        return user
     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden")
