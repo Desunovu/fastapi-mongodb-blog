@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from beanie import Document, Link
-from pydantic import BaseModel
+from pydantic import BaseModel, model_validator
 
 from ..users.model import UserDocument
 
@@ -22,6 +22,11 @@ class ArticleCreateOrUpdate(BaseModel):
     title: str | None = None
     content: str | None = None
     tags: list[str] | None = None
+
+    @model_validator(mode="after")
+    def check_not_all_attributes_is_none(self):
+        if not self.model_fields_set:
+            raise ValueError("Model must have at least one not None field")
 
     model_config = {
         "json_schema_extra": {
