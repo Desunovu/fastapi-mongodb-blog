@@ -1,7 +1,8 @@
 from datetime import datetime
+from typing import Annotated
 
-from beanie import Document, Link
-from pydantic import BaseModel, model_validator
+from beanie import Link
+from pydantic import BaseModel, model_validator, Field
 
 from ..users.model import UserDocument
 from ...core.database.extended_document import ExtendedDocument
@@ -20,9 +21,9 @@ class ArticleDocument(ExtendedDocument):
 
 
 class ArticleCreateOrUpdate(BaseModel):
-    title: str | None = None
-    content: str | None = None
-    tags: list[str] | None = None
+    title: Annotated[str, Field(min_length=2, max_length=120)] | None = None
+    content: Annotated[str, Field(max_length=120)] | None = None
+    tags: Annotated[list[str], Field(max_items=20)] | None = None
 
     @model_validator(mode="after")
     def check_not_all_attributes_is_none(self):
@@ -35,7 +36,7 @@ class ArticleCreateOrUpdate(BaseModel):
                 {
                     "title": "Article Title",
                     "content": "Article Text",
-                    "tags": [],
+                    "tags": ["One", "Two"],
                 }
             ]
         }
