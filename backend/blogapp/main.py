@@ -2,8 +2,8 @@ import logging
 
 from fastapi import FastAPI
 
+from .core.database.mongodb import init_odm
 from .core.logging import init_loggers
-from .core.mongodb import init_odm
 from .core.security import routes as security_routes
 from .modules import api_test
 from .modules.articles.routes import router as articles_router

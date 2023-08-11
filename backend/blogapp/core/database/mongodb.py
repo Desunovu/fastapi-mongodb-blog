@@ -1,10 +1,10 @@
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from .config import MONGODB_URL, MONGODB_DATABASE
-from ..modules.articles.models import ArticleDocument
-from ..modules.comments.model import CommentDocument
-from ..modules.users.model import UserDocument
+from ..config import MONGODB_URL, MONGODB_DATABASE
+from ...modules.articles.models import ArticleDocument
+from ...modules.comments.model import CommentDocument
+from ...modules.users.model import UserDocument
 
 
 # Init beanie ODM
