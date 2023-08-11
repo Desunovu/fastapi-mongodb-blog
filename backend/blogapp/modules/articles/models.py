@@ -29,6 +29,7 @@ class ArticleCreateOrUpdate(BaseModel):
     def check_not_all_attributes_is_none(self):
         if not self.model_fields_set:
             raise ValueError("Model must have at least one not None field")
+        return self
 
     model_config = {
         "json_schema_extra": {
