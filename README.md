@@ -16,7 +16,7 @@ Educational project on developing a blog. The main goal of the project is to uti
 
 - User registration and authentication :white_check_mark:
 - Hierarchical Role-Based Access Control :white_check_mark:
-- Creation, editing, and deletion of blog articles :x:
+- Creation, editing, and deletion of blog articles :white_check_mark:
 - Display of article list and their details :x:
 - Adding comments to articles :x:
 - Search for articles using keywords :x:
