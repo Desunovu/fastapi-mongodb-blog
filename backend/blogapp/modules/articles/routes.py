@@ -44,11 +44,9 @@ async def read_article(
     """Возвращает статью по ее uuid."""
 
     # Получение данных
-    article = await ArticleDocument.get(document_id=article_id)
-    if not article:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Article not found"
-        )
+    article = await ArticleDocument.get_or_404(
+        document_id=article_id, fetch_links=False
+    )
     return {"article": article}
 
 
