@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Annotated
 
 from beanie import PydanticObjectId
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Response
 from starlette import status
 
 from .models import ArticleCreateOrUpdate, ArticleResponse, ArticleDocument
@@ -63,3 +63,16 @@ async def update_article(
     await article.save()
 
     return {"article": article}
+
+
+@router.delete("/{article_id}")
+async def delete_article(
+        article_id: PydanticObjectId,
+        current_user: Annotated[UserDocument, Depends(RoleChecker(allowed_role=RolesEnum.AUTHOR.value))]
+):
+    article = await ArticleDocument.get_or_404(document_id=article_id, fetch_links=False)
+    _current_user = check_user_can_modify_article(article=article, user=current_user)
+    delete_result = await article.delete()
+    if delete_result:
+        return Response(status_code=status.HTTP_204_NO_CONTENT)
+    raise HTTPException(status_code=status.HTTP_410_GONE)
