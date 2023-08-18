@@ -5,13 +5,39 @@ from beanie import PydanticObjectId
 from fastapi import APIRouter, Depends, HTTPException, Response
 from starlette import status
 
-from .models import ArticleCreateOrUpdate, ArticleResponse, ArticleDocument
+from .models import (
+    ArticleCreateOrUpdate,
+    ArticleResponse,
+    ArticleDocument,
+    ArticlesResponse,
+)
 from .utils import check_user_can_modify_article
 from ..users.model import UserDocument
 from ...core.security.roles import RolesEnum
 from ...core.security.utilities import RoleChecker
 
 router = APIRouter(prefix="/articles")
+
+
+@router.get("/", response_model=ArticlesResponse)
+async def list_articles(
+    _current_user: Annotated[
+        UserDocument, Depends(RoleChecker(allowed_role=RolesEnum.READER.value))
+    ],
+):
+    """Возвращает список статей."""
+
+    # TODO добавить проекции
+    # Получение списка статей
+    articles = (
+        await ArticleDocument.find(fetch_links=True)
+        .sort(-ArticleDocument.created_at)
+        .skip(n=None)
+        .limit(n=None)
+        .to_list(length=None)
+    )
+
+    return {"articles": articles}
 
 
 @router.post("/", response_model=ArticleResponse)

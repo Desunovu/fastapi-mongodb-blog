@@ -46,3 +46,7 @@ class ArticleCreateOrUpdate(BaseModel):
 
 class ArticleResponse(BaseModel):
     article: ArticleDocument
+
+
+class ArticlesResponse(BaseModel):
+    articles: list[ArticleDocument]
