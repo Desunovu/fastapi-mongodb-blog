@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Annotated
 
 from beanie import PydanticObjectId
+from beanie.odm.enums import SortDirection
 from fastapi import APIRouter, Depends, HTTPException, Response, Query
 from starlette import status
 
@@ -10,6 +11,7 @@ from .models import (
     ArticleResponse,
     ArticleDocument,
     ArticlesResponse,
+    ArticlesSortField,
 )
 from .utils import check_user_can_modify_article
 from ..users.model import UserDocument
@@ -26,6 +28,8 @@ async def list_articles(
     ],
     skip: Annotated[int | None, Query(ge=0)] = None,  # >= 0
     limit: Annotated[int | None, Query(ge=1)] = None,  # >= 1
+    sort_by: Annotated[ArticlesSortField, Query()] = ArticlesSortField.created_at.value,
+    sort_order: Annotated[SortDirection, Query()] = SortDirection.DESCENDING.value,
 ):
     """Возвращает список статей."""
 
@@ -33,7 +37,7 @@ async def list_articles(
     # Получение списка статей
     articles = (
         await ArticleDocument.find(fetch_links=True)
-        .sort(-ArticleDocument.created_at)
+        .sort((sort_by, sort_order))
         .skip(n=skip)
         .limit(n=limit)
         .to_list(length=None)

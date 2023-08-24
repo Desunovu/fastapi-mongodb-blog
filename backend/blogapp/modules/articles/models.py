@@ -1,4 +1,5 @@
 from datetime import datetime
+from enum import Enum
 from typing import Annotated
 
 from beanie import Link
@@ -50,3 +51,8 @@ class ArticleResponse(BaseModel):
 
 class ArticlesResponse(BaseModel):
     articles: list[ArticleDocument]
+
+
+class ArticlesSortField(str, Enum):
+    created_at = "created_at"
+    title = "title"
