@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Annotated
 
 from beanie import PydanticObjectId
-from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi import APIRouter, Depends, HTTPException, Response, Query
 from starlette import status
 
 from .models import (
@@ -24,6 +24,8 @@ async def list_articles(
     _current_user: Annotated[
         UserDocument, Depends(RoleChecker(allowed_role=RolesEnum.READER.value))
     ],
+    skip: Annotated[int | None, Query(ge=0)] = None,  # >= 0
+    limit: Annotated[int | None, Query(ge=1)] = None,  # >= 1
 ):
     """Возвращает список статей."""
 
@@ -32,8 +34,8 @@ async def list_articles(
     articles = (
         await ArticleDocument.find(fetch_links=True)
         .sort(-ArticleDocument.created_at)
-        .skip(n=None)
-        .limit(n=None)
+        .skip(n=skip)
+        .limit(n=limit)
         .to_list(length=None)
     )
 
