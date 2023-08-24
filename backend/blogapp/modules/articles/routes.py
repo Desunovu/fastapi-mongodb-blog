@@ -2,16 +2,48 @@ from datetime import datetime
 from typing import Annotated
 
 from beanie import PydanticObjectId
-from fastapi import APIRouter, Depends, HTTPException, Response
+from beanie.odm.enums import SortDirection
+from fastapi import APIRouter, Depends, HTTPException, Response, Query
 from starlette import status
 
-from .models import ArticleCreateOrUpdate, ArticleResponse, ArticleDocument
+from .models import (
+    ArticleCreateOrUpdate,
+    ArticleResponse,
+    ArticleDocument,
+    ArticlesResponse,
+    ArticlesSortField,
+)
 from .utils import check_user_can_modify_article
 from ..users.model import UserDocument
 from ...core.security.roles import RolesEnum
 from ...core.security.utilities import RoleChecker
 
 router = APIRouter(prefix="/articles")
+
+
+@router.get("/", response_model=ArticlesResponse)
+async def list_articles(
+    _current_user: Annotated[
+        UserDocument, Depends(RoleChecker(allowed_role=RolesEnum.READER.value))
+    ],
+    skip: Annotated[int | None, Query(ge=0)] = None,  # >= 0
+    limit: Annotated[int | None, Query(ge=1)] = None,  # >= 1
+    sort_by: Annotated[ArticlesSortField, Query()] = ArticlesSortField.created_at.value,
+    sort_order: Annotated[SortDirection, Query()] = SortDirection.DESCENDING.value,
+):
+    """Возвращает список статей."""
+
+    # TODO добавить проекции
+    # Получение списка статей
+    articles = (
+        await ArticleDocument.find(fetch_links=True)
+        .sort((sort_by, sort_order))
+        .skip(n=skip)
+        .limit(n=limit)
+        .to_list(length=None)
+    )
+
+    return {"articles": articles}
 
 
 @router.post("/", response_model=ArticleResponse)
