@@ -14,7 +14,7 @@ from .models import (
     ArticlesSortField,
 )
 from .utils import check_user_can_modify_article
-from ..users.model import UserDocument
+from ..users.models import UserDocument
 from ...core.security.roles import RolesEnum
 from ...core.security.utilities import RoleChecker
 

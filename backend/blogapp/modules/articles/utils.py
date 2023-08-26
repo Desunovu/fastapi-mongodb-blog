@@ -2,7 +2,7 @@ from fastapi import HTTPException
 from starlette import status
 
 from .models import ArticleDocument
-from ..users.model import UserDocument
+from ..users.models import UserDocument
 from ...core.security.roles import RolesEnum
 
 

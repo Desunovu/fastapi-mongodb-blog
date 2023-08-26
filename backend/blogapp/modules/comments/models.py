@@ -2,7 +2,7 @@ from datetime import datetime
 
 from beanie import Link
 
-from ..users.model import UserDocument
+from ..users.models import UserDocument
 from ...core.database.extended_document import ExtendedDocument
 
 
