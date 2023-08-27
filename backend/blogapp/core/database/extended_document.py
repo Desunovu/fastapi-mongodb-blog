@@ -7,7 +7,7 @@ class ExtendedDocument(Document):
     """Подкласс Document из библиотеки beanie с дополнительными методами для расширенного функционала."""
 
     @classmethod
-    async def get_or_404(cls, document_id, fetch_links=True):
+    async def get_or_404(cls, document_id, fetch_links=False):
         """
         Извлекает и возвращает документ через Document.get().
         Если документ не найден - поднимает исключение HTTPException с кодом состояния 404.
