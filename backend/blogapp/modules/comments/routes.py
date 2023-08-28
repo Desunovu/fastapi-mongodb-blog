@@ -76,18 +76,18 @@ async def create_comment(
     return {"comment": comment}
 
 
-@router.post("/{comment_id}/reply", response_model=CommentResponse)
+@router.post("/reply", response_model=CommentResponse)
 async def create_reply(
     current_user: Annotated[
         UserDocument, Depends(RoleChecker(allowed_role=RolesEnum.READER.value))
     ],
-    comment_id: PydanticObjectId,
-    # TODO Перенести commentId в тело запроса
     reply_data: ReplyCreateOrUpdate,
 ):
     """Создает комментарий-ответ на комментарий"""
     # Поиск комментария для ответа
-    parent_comment = await CommentDocument.get_or_404(document_id=comment_id)
+    parent_comment = await CommentDocument.get_or_404(
+        document_id=reply_data.parent_comment_id
+    )
     # Создание документа ответа
     reply = CommentDocument(
         author=current_user,

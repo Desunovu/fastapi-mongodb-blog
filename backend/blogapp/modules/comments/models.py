@@ -30,6 +30,7 @@ class CommentCreateOrUpdate(BaseModel):
 
 
 class ReplyCreateOrUpdate(BaseModel):
+    parent_comment_id: PydanticObjectId = Field(..., exclude=True)
     content: str = Field(..., min_length=2, max_length=120)
 
 
