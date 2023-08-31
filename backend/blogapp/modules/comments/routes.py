@@ -17,6 +17,10 @@ from .models import (
 )
 from ..articles.models import ArticleDocument
 from ..users.models import UserDocument
+from ...core.database.extended_document import (
+    delete_document_by_id,
+    update_document_by_id,
+)
 from ...core.security.roles import RolesEnum
 from ...core.security.utilities import RoleChecker
 
@@ -107,3 +111,38 @@ async def create_reply(
     await parent_comment.save()
 
     return {"comment": reply}
+
+
+@router.put("/{comment_id}", response_model=CommentResponse)
+async def update_comment(
+    current_user: Annotated[
+        UserDocument, Depends(RoleChecker(allowed_role=RolesEnum.READER.value))
+    ],
+    comment_id: PydanticObjectId,
+    comment_data: CommentUpdate,
+):
+    """Обновляет комментарий по id"""
+
+    comment = update_document_by_id(
+        document_id=comment_id,
+        current_user=current_user,
+        update_data=comment_data,
+    )
+
+    return {"comment": comment}
+
+
+@router.delete("/{comment_id}")
+async def delete_comment(
+    current_user: Annotated[
+        UserDocument, Depends(RoleChecker(allowed_role=RolesEnum.READER.value))
+    ],
+    comment_id: PydanticObjectId,
+):
+    """Удаляет комментарий по id"""
+
+    delete_response = delete_document_by_id(
+        document_id=comment_id, current_user=current_user
+    )
+
+    return delete_response
