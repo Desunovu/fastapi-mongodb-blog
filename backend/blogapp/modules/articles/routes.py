@@ -14,7 +14,7 @@ from .models import (
 )
 from .utils import check_user_can_modify_document
 from ..users.models import UserDocument
-from ...core.database.extended_document import delete_document
+from ...core.database.extended_document import delete_document_by_id
 from ...core.security.roles import RolesEnum
 from ...core.security.utilities import RoleChecker
 
@@ -115,6 +115,8 @@ async def delete_article(
 ):
     """Удаляет статью по ее uuid"""
 
-    delete_response = delete_document(document_id=article_id, user=current_user)
+    delete_response = delete_document_by_id(
+        document_id=article_id, current_user=current_user
+    )
 
     return delete_response

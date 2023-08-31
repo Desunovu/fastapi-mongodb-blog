@@ -24,19 +24,24 @@ class ExtendedDocument(Document):
         return document
 
 
-def delete_document(document_id: PydanticObjectId, user: UserDocument) -> Response:
-    """Удаляет документ по его ID"""
+def delete_document_by_id(
+    document_id: PydanticObjectId, current_user: UserDocument
+) -> Response:
+    """Удаляет документ по его ID. У документа должен быть author."""
 
     # Поиск документа
-    comment = await ExtendedDocument.get_or_404(
+    document = await ExtendedDocument.get_or_404(
         document_id=document_id, fetch_links=True
     )
     # Проверка прав редактирования
-    _current_user = check_user_can_modify_document(
-        document_author=comment.author, user=user
-    )
+    try:
+        _current_user = check_user_can_modify_document(
+            document_author=document.author, user=current_user
+        )
+    except Exception:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
     # Удаление документа
-    delete_result = await comment.delete()
+    delete_result = await document.delete()
 
     if delete_result:
         return Response(status_code=status.HTTP_204_NO_CONTENT)
