@@ -10,9 +10,10 @@ from .models import (
     CommentsSortField,
     CommentsResponse,
     CommentDocument,
-    CommentCreateOrUpdate,
+    CommentCreate,
     CommentResponse,
-    ReplyCreateOrUpdate,
+    ReplyCreate,
+    CommentUpdate,
 )
 from ..articles.models import ArticleDocument
 from ..users.models import UserDocument
@@ -57,7 +58,7 @@ async def create_comment(
     current_user: Annotated[
         UserDocument, Depends(RoleChecker(allowed_role=RolesEnum.READER.value))
     ],
-    comment_data: CommentCreateOrUpdate,
+    comment_data: CommentCreate,
 ):
     """Создает новый комментарий к статье."""
     # Поиск статьи
@@ -81,7 +82,7 @@ async def create_reply(
     current_user: Annotated[
         UserDocument, Depends(RoleChecker(allowed_role=RolesEnum.READER.value))
     ],
-    reply_data: ReplyCreateOrUpdate,
+    reply_data: ReplyCreate,
 ):
     """Создает комментарий-ответ на комментарий"""
     # Поиск комментария для ответа

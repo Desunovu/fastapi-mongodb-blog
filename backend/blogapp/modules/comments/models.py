@@ -24,14 +24,22 @@ class CommentDocument(ExtendedDocument):
         name = "comments"
 
 
-class CommentCreateOrUpdate(BaseModel):
+class CommentUpdate(BaseModel):
+    """Тело запроса изменения комментария"""
+
+    content: str = Field(..., min_length=2, max_length=120)
+
+
+class CommentCreate(CommentUpdate):
+    """Тело запроса создания комментария"""
+
     article_id: PydanticObjectId = Field(..., exclude=True)
-    content: str = Field(..., min_length=2, max_length=120)
 
 
-class ReplyCreateOrUpdate(BaseModel):
+class ReplyCreate(CommentUpdate):
+    """Тело запроса создания ответа на комментарий"""
+
     parent_comment_id: PydanticObjectId = Field(..., exclude=True)
-    content: str = Field(..., min_length=2, max_length=120)
 
 
 class CommentsResponse(BaseModel):
