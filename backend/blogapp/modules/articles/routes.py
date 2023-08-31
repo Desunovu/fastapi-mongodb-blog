@@ -3,8 +3,7 @@ from typing import Annotated
 
 from beanie import PydanticObjectId
 from beanie.odm.enums import SortDirection
-from fastapi import APIRouter, Depends, HTTPException, Response, Query
-from starlette import status
+from fastapi import APIRouter, Depends, Query
 
 from .models import (
     ArticleCreateOrUpdate,
@@ -15,6 +14,7 @@ from .models import (
 )
 from .utils import check_user_can_modify_document
 from ..users.models import UserDocument
+from ...core.database.extended_document import delete_document
 from ...core.security.roles import RolesEnum
 from ...core.security.utilities import RoleChecker
 
@@ -115,18 +115,6 @@ async def delete_article(
 ):
     """Удаляет статью по ее uuid"""
 
-    # Получение данных
-    article = await ArticleDocument.get_or_404(
-        document_id=article_id, fetch_links=False
-    )
-    # Проверка прав
-    _current_user = check_user_can_modify_document(
-        document_author=article.author, user=current_user
-    )
-    # Удаление данных
-    delete_result = await article.delete()
+    delete_response = delete_document(document_id=article_id, user=current_user)
 
-    if delete_result:
-        return Response(status_code=status.HTTP_204_NO_CONTENT)
-    # Исключение на случай если не получен delete_result
-    raise HTTPException(status_code=status.HTTP_410_GONE)
+    return delete_response
