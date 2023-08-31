@@ -12,9 +12,11 @@ from .models import (
     ArticlesResponse,
     ArticlesSortField,
 )
-from .utils import check_user_can_modify_document
 from ..users.models import UserDocument
-from ...core.database.extended_document import delete_document_by_id
+from ...core.database.extended_document import (
+    delete_document_by_id,
+    update_document_by_id,
+)
 from ...core.security.roles import RolesEnum
 from ...core.security.utilities import RoleChecker
 
@@ -90,18 +92,13 @@ async def update_article(
         UserDocument, Depends(RoleChecker(allowed_role=RolesEnum.AUTHOR.value))
     ],
 ):
-    """Обновляет статью по ее uuid"""
+    """Обновляет статью по id"""
 
-    # Получение данных
-    article = await ArticleDocument.get_or_404(document_id=article_id, fetch_links=True)
-    # Проверка прав
-    _current_user = check_user_can_modify_document(
-        document_author=article.author, user=current_user
+    article = update_document_by_id(
+        document_id=article_id,
+        current_user=current_user,
+        update_data=article_data,
     )
-    # Обновление данных
-    article = article.model_copy(update=article_data.model_dump(exclude_unset=True))
-    article.updated_at = datetime.utcnow()
-    await article.save()
 
     return {"article": article}
 

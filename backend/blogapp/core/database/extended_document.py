@@ -1,5 +1,8 @@
+from datetime import datetime
+
 from beanie import Document, PydanticObjectId
 from fastapi import HTTPException
+from pydantic import BaseModel
 from starlette import status
 from starlette.responses import Response
 
@@ -22,6 +25,31 @@ class ExtendedDocument(Document):
                 status_code=status.HTTP_404_NOT_FOUND, detail="Document not found"
             )
         return document
+
+
+# TODO вынести функционал утилит в модули
+def update_document_by_id(
+    document_id: PydanticObjectId,
+    current_user: UserDocument,
+    update_data: BaseModel,
+) -> ExtendedDocument:
+    """Обновляет документ по его ID. У документа должен быть author."""
+
+    # Получение данных
+    document = await ExtendedDocument.get_or_404(document_id=document_id)
+    # Проверка прав редактирования
+    try:
+        _current_user = check_user_can_modify_document(
+            document_author=document.author, user=current_user
+        )
+    except Exception:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    # Обновление данных
+    document = document.model_copy(update=update_data.model_dump(exclude_unset=True))
+    document.updated_at = datetime.utcnow()
+    await document.save()
+
+    return document
 
 
 def delete_document_by_id(
