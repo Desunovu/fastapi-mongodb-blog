@@ -19,7 +19,6 @@ from ..articles.models import ArticleDocument
 from ..users.models import UserDocument
 from ...core.security.roles import RolesEnum
 from ...core.security.utilities import RoleChecker
-from ...utils.document_utils import update_document_by_id, delete_document_by_id
 
 router = APIRouter(prefix="/comments")
 
@@ -120,7 +119,7 @@ async def update_comment(
 ):
     """Обновляет комментарий по id"""
 
-    comment = await update_document_by_id(
+    comment = await CommentDocument.update_document_by_id(
         document_id=comment_id,
         current_user=current_user,
         update_data=comment_data,
@@ -138,7 +137,7 @@ async def delete_comment(
 ):
     """Удаляет комментарий по id"""
 
-    delete_response = await delete_document_by_id(
+    delete_response = await CommentDocument.delete_document_by_id(
         document_id=comment_id, current_user=current_user
     )
 

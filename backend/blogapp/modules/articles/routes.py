@@ -15,7 +15,6 @@ from .models import (
 from ..users.models import UserDocument
 from ...core.security.roles import RolesEnum
 from ...core.security.utilities import RoleChecker
-from ...utils.document_utils import update_document_by_id, delete_document_by_id
 
 router = APIRouter(prefix="/articles")
 
@@ -91,7 +90,7 @@ async def update_article(
 ):
     """Обновляет статью по id"""
 
-    article = await update_document_by_id(
+    article = await ArticleDocument.update_document_by_id(
         document_id=article_id,
         current_user=current_user,
         update_data=article_data,
@@ -109,7 +108,7 @@ async def delete_article(
 ):
     """Удаляет статью по ее uuid"""
 
-    delete_response = await delete_document_by_id(
+    delete_response = await ArticleDocument.delete_document_by_id(
         document_id=article_id, current_user=current_user
     )
 
