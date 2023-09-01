@@ -123,7 +123,7 @@ async def update_comment(
 ):
     """Обновляет комментарий по id"""
 
-    comment = update_document_by_id(
+    comment = await update_document_by_id(
         document_id=comment_id,
         current_user=current_user,
         update_data=comment_data,
@@ -141,7 +141,7 @@ async def delete_comment(
 ):
     """Удаляет комментарий по id"""
 
-    delete_response = delete_document_by_id(
+    delete_response = await delete_document_by_id(
         document_id=comment_id, current_user=current_user
     )
 

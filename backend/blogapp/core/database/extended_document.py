@@ -28,7 +28,7 @@ class ExtendedDocument(Document):
 
 
 # TODO вынести функционал утилит в модули
-def update_document_by_id(
+async def update_document_by_id(
     document_id: PydanticObjectId,
     current_user: UserDocument,
     update_data: BaseModel,
@@ -52,7 +52,7 @@ def update_document_by_id(
     return document
 
 
-def delete_document_by_id(
+async def delete_document_by_id(
     document_id: PydanticObjectId, current_user: UserDocument
 ) -> Response:
     """Удаляет документ по его ID. У документа должен быть author."""

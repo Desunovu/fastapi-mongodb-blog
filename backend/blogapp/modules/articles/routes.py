@@ -94,7 +94,7 @@ async def update_article(
 ):
     """Обновляет статью по id"""
 
-    article = update_document_by_id(
+    article = await update_document_by_id(
         document_id=article_id,
         current_user=current_user,
         update_data=article_data,
@@ -112,7 +112,7 @@ async def delete_article(
 ):
     """Удаляет статью по ее uuid"""
 
-    delete_response = delete_document_by_id(
+    delete_response = await delete_document_by_id(
         document_id=article_id, current_user=current_user
     )
 
