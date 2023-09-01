@@ -13,12 +13,9 @@ from .models import (
     ArticlesSortField,
 )
 from ..users.models import UserDocument
-from ...core.database.extended_document import (
-    delete_document_by_id,
-    update_document_by_id,
-)
 from ...core.security.roles import RolesEnum
 from ...core.security.utilities import RoleChecker
+from ...utils.document_utils import update_document_by_id, delete_document_by_id
 
 router = APIRouter(prefix="/articles")
 

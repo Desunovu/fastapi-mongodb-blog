@@ -1,13 +1,6 @@
-from datetime import datetime
-
-from beanie import Document, PydanticObjectId
+from beanie import Document
 from fastapi import HTTPException
-from pydantic import BaseModel
 from starlette import status
-from starlette.responses import Response
-
-from backend.blogapp.modules.articles.utils import check_user_can_modify_document
-from backend.blogapp.modules.users.models import UserDocument
 
 
 class ExtendedDocument(Document):
@@ -25,54 +18,3 @@ class ExtendedDocument(Document):
                 status_code=status.HTTP_404_NOT_FOUND, detail="Document not found"
             )
         return document
-
-
-# TODO вынести функционал утилит в модули
-async def update_document_by_id(
-    document_id: PydanticObjectId,
-    current_user: UserDocument,
-    update_data: BaseModel,
-) -> ExtendedDocument:
-    """Обновляет документ по его ID. У документа должен быть author."""
-
-    # Получение данных
-    document = await ExtendedDocument.get_or_404(document_id=document_id)
-    # Проверка прав редактирования
-    try:
-        _current_user = check_user_can_modify_document(
-            document_author=document.author, user=current_user
-        )
-    except Exception:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    # Обновление данных
-    document = document.model_copy(update=update_data.model_dump(exclude_unset=True))
-    document.updated_at = datetime.utcnow()
-    await document.save()
-
-    return document
-
-
-async def delete_document_by_id(
-    document_id: PydanticObjectId, current_user: UserDocument
-) -> Response:
-    """Удаляет документ по его ID. У документа должен быть author."""
-
-    # Поиск документа
-    document = await ExtendedDocument.get_or_404(
-        document_id=document_id, fetch_links=True
-    )
-    # Проверка прав редактирования
-    try:
-        _current_user = check_user_can_modify_document(
-            document_author=document.author, user=current_user
-        )
-    except Exception:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    # Удаление документа
-    delete_result = await document.delete()
-
-    if delete_result:
-        return Response(status_code=status.HTTP_204_NO_CONTENT)
-
-    # Исключение на случай если не получен delete_result
-    raise HTTPException(status_code=status.HTTP_410_GONE)
