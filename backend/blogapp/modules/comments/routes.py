@@ -136,9 +136,10 @@ async def delete_comment(
     comment_id: PydanticObjectId,
 ):
     """Удаляет комментарий по id"""
-
     delete_response = await CommentDocument.delete_document_by_id(
-        document_id=comment_id, current_user=current_user
+        document_id=comment_id,
+        current_user=current_user,
+        link_fields_to_delete=["replies"],
     )
 
     return delete_response

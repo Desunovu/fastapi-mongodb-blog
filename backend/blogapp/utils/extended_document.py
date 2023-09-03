@@ -69,6 +69,7 @@ class ExtendedDocument(Document):
         cls,
         document_id: PydanticObjectId,
         current_user: UserBase,
+        link_fields_to_delete: list[str] | None = None,
     ) -> Response:
         """Удаляет документ по его ID. У документа должен быть author."""
 
@@ -81,11 +82,18 @@ class ExtendedDocument(Document):
             )
         except Exception:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        # Удаление ссылок
+        for field_name in link_fields_to_delete:
+            document_field_to_delete = getattr(document, field_name, None)
+            if isinstance(document_field_to_delete, list):
+                for link in document_field_to_delete:
+                    await link.delete()
+            elif isinstance(document_field_to_delete, ExtendedDocument):
+                await document_field_to_delete.delete()
         # Удаление документа
         delete_result = await document.delete()
 
         if delete_result:
             return Response(status_code=status.HTTP_204_NO_CONTENT)
-
         # Исключение на случай если не получен delete_result
         raise HTTPException(status_code=status.HTTP_410_GONE)
