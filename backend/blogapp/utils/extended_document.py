@@ -6,16 +6,14 @@ from pydantic import BaseModel
 from starlette import status
 from starlette.responses import Response
 
+from ..core.security.models import UserBase
 from ..core.security.roles import RolesEnum
 
 
 class ExtendedDocument(Document):
     """Подкласс Document из библиотеки beanie с дополнительными методами для расширенного функционала."""
 
-    def check_user_can_modify_document(
-        self,
-        current_user: "UserDocument",
-    ) -> "UserDocument":
+    def check_user_can_modify_document(self, current_user: UserBase) -> UserBase:
         """
         Проверяет, может ли пользователь редактировать документ.
         :return: UserDocument
@@ -43,7 +41,7 @@ class ExtendedDocument(Document):
     async def update_document_by_id(
         cls,
         document_id: PydanticObjectId,
-        current_user: "UserDocument",
+        current_user: UserBase,
         update_data: BaseModel,
     ):
         """Обновляет документ по его ID. У документа должен быть author."""
@@ -70,7 +68,7 @@ class ExtendedDocument(Document):
     async def delete_document_by_id(
         cls,
         document_id: PydanticObjectId,
-        current_user: "UserDocument",
+        current_user: UserBase,
     ) -> Response:
         """Удаляет документ по его ID. У документа должен быть author."""
 
