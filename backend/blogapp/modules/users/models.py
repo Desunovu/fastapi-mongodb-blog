@@ -2,8 +2,8 @@ from datetime import datetime
 
 from pydantic import EmailStr, Field
 
-from ...core.database.extended_document import ExtendedDocument
 from ...core.security.roles import RolesEnum
+from ...utils.extended_document import ExtendedDocument
 
 
 class UserDocument(ExtendedDocument):

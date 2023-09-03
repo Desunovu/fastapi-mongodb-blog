@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 
 from ..articles.models import ArticleDocument
 from ..users.models import UserDocument
-from ...core.database.extended_document import ExtendedDocument
+from ...utils.extended_document import ExtendedDocument
 
 
 class CommentDocument(ExtendedDocument):

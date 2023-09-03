@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from starlette import status
 from starlette.responses import Response
 
-from ..security.roles import RolesEnum
+from ..core.security.roles import RolesEnum
 
 
 class ExtendedDocument(Document):
