@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
-from .users.model import UserDocument
+from .users.models import UserDocument
 from ..core.security.roles import RolesEnum
 from ..core.security.utilities import RoleChecker
 

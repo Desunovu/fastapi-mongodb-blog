@@ -7,8 +7,8 @@ Educational project on developing a blog. The main goal of the project is to uti
 ## Technology Stack
 
 - **Programming Language**: Python
-- **Web Framework**: FastAPI
-- **Database**: MongoDB (Motor async driver & Beanie ODM)
+- **Web Framework**: [FastAPI](https://fastapi.tiangolo.com/)
+- **Database**: MongoDB (with [Beanie ODM](https://beanie-odm.dev/))
 - **Frontend**: _Not selected yet_
 - **Honorable mention**: OAuth 2.0 JWT
 
@@ -19,7 +19,7 @@ Educational project on developing a blog. The main goal of the project is to uti
 - Creation, editing, and deletion of blog articles :white_check_mark:
 - Display of article list and their details :white_check_mark:
 - Pagination and sort support for displaying a large number of articles :white_check_mark:
-- Adding comments to articles :x:
+- Adding comments/replies to articles :white_check_mark:
 - Search for articles using keywords :x:
 - Ability to add tags to articles and filter by tags :x:
 

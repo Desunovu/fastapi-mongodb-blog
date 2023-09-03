@@ -5,8 +5,8 @@ from typing import Annotated
 from beanie import Link
 from pydantic import BaseModel, model_validator, Field
 
-from ..users.model import UserDocument
-from ...core.database.extended_document import ExtendedDocument
+from ..users.models import UserDocument
+from ...utils.extended_document import ExtendedDocument
 
 
 class ArticleDocument(ExtendedDocument):

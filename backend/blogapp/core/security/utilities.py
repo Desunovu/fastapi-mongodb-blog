@@ -9,7 +9,7 @@ from starlette import status
 
 from .roles import RolesEnum
 from ..config import ACCESS_TOKEN_EXPIRE_MINUTES, SECRET_KEY, ALGORITHM
-from ...modules.users.model import UserDocument
+from ...modules.users.models import UserDocument
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="./token")

@@ -3,8 +3,7 @@ from typing import Annotated
 
 from beanie import PydanticObjectId
 from beanie.odm.enums import SortDirection
-from fastapi import APIRouter, Depends, HTTPException, Response, Query
-from starlette import status
+from fastapi import APIRouter, Depends, Query
 
 from .models import (
     ArticleCreateOrUpdate,
@@ -13,8 +12,7 @@ from .models import (
     ArticlesResponse,
     ArticlesSortField,
 )
-from .utils import check_user_can_modify_article
-from ..users.model import UserDocument
+from ..users.models import UserDocument
 from ...core.security.roles import RolesEnum
 from ...core.security.utilities import RoleChecker
 
@@ -90,16 +88,13 @@ async def update_article(
         UserDocument, Depends(RoleChecker(allowed_role=RolesEnum.AUTHOR.value))
     ],
 ):
-    """Обновляет статью по ее uuid"""
+    """Обновляет статью по id"""
 
-    # Получение данных
-    article = await ArticleDocument.get_or_404(document_id=article_id, fetch_links=True)
-    # Проверка прав
-    _current_user = check_user_can_modify_article(article=article, user=current_user)
-    # Обновление данных
-    article = article.model_copy(update=article_data.model_dump(exclude_unset=True))
-    article.updated_at = datetime.utcnow()
-    await article.save()
+    article = await ArticleDocument.update_document_by_id(
+        document_id=article_id,
+        current_user=current_user,
+        update_data=article_data,
+    )
 
     return {"article": article}
 
@@ -113,16 +108,8 @@ async def delete_article(
 ):
     """Удаляет статью по ее uuid"""
 
-    # Получение данных
-    article = await ArticleDocument.get_or_404(
-        document_id=article_id, fetch_links=False
+    delete_response = await ArticleDocument.delete_document_by_id(
+        document_id=article_id, current_user=current_user
     )
-    # Проверка прав
-    _current_user = check_user_can_modify_article(article=article, user=current_user)
-    # Удаление данных
-    delete_result = await article.delete()
 
-    if delete_result:
-        return Response(status_code=status.HTTP_204_NO_CONTENT)
-    # Исключение на случай если не получен delete_result
-    raise HTTPException(status_code=status.HTTP_410_GONE)
+    return delete_response
