@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from beanie import Document, PydanticObjectId, DeleteRules
+from beanie import Document, PydanticObjectId
 from fastapi import HTTPException
 from pydantic import BaseModel
 from starlette import status
@@ -81,8 +81,8 @@ class ExtendedDocument(Document):
             )
         except Exception:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        # Удаление документа и всех ссылок
-        delete_result = await document.delete(link_rule=DeleteRules.DELETE_LINKS)
+        # Удаление документа
+        delete_result = await document.delete()
 
         if delete_result:
             return Response(status_code=status.HTTP_204_NO_CONTENT)
