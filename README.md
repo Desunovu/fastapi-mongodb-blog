@@ -20,8 +20,8 @@ Educational project on developing a blog. The main goal of the project is to uti
 - Display of article list and their details :white_check_mark:
 - Pagination and sort support for displaying a large number of articles :white_check_mark:
 - Adding comments/replies to articles :white_check_mark:
-- Search for articles using keywords :x:
-- Ability to add tags to articles and filter by tags :x:
+- Search for articles using keywords :white_check_mark:
+- Ability to add tags to articles and filter by tags :white_check_mark:
 
 ## Project Implementation Steps
 
