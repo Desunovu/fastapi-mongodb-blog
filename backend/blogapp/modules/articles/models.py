@@ -2,6 +2,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Annotated
 
+import pymongo
 from beanie import Link
 from pydantic import BaseModel, model_validator, Field
 
@@ -19,6 +20,12 @@ class ArticleDocument(ExtendedDocument):
 
     class Settings:
         name = "articles"
+        indexes = [
+            [
+                ("title", pymongo.TEXT),
+                ("content", pymongo.TEXT),
+            ]
+        ]
 
 
 class ArticleCreateOrUpdate(BaseModel):
