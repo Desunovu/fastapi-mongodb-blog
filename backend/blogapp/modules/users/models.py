@@ -26,7 +26,7 @@ class UserDocument(ExtendedDocument, UserBase):
 class UpdateUserRequest(BaseModel):
     """Модель для обновления информации о пользователе"""
 
-    email: str
+    email: EmailStr
 
 
 class UpdateUserPasswordRequest(BaseModel):
