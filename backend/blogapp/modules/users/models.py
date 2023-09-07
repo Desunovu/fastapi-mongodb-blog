@@ -1,6 +1,8 @@
 from datetime import datetime
 from enum import Enum
+from typing import Annotated
 
+from fastapi import Body
 from pydantic import EmailStr, Field, BaseModel
 
 from ...core.security.models import UserBase
@@ -25,6 +27,13 @@ class UpdateUserRequest(BaseModel):
     """Модель для обновления информации о пользователе"""
 
     email: str
+
+
+class UpdateUserPasswordRequest(BaseModel):
+    """Модель для обновления пароля"""
+
+    new_password: Annotated[str, Body(description="Новый пароль")]
+    old_password: Annotated[str | None, Body(description="Старый пароль")] = None
 
 
 class UsersResponse(BaseModel):

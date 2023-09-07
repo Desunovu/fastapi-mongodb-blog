@@ -2,7 +2,7 @@ from typing import Annotated
 
 from beanie import PydanticObjectId
 from beanie.odm.enums import SortDirection
-from fastapi import APIRouter, Depends, Query, Path, Body, HTTPException
+from fastapi import APIRouter, Depends, Query, Path, HTTPException
 from starlette import status
 
 from .models import (
@@ -11,6 +11,7 @@ from .models import (
     UsersSortField,
     UserResponse,
     UpdateUserRequest,
+    UpdateUserPasswordRequest,
 )
 from ...core.security.roles import RolesEnum
 from ...core.security.utilities import (
@@ -93,8 +94,7 @@ async def update_user_password(
         UserDocument, Depends(RoleChecker(allowed_role=RolesEnum.READER.value))
     ],
     user_id: Annotated[PydanticObjectId, Path(description="UUID Пользователя")],
-    new_password: Annotated[str, Body()],
-    old_password: Annotated[str | None, Body()] = None,
+    password_data: UpdateUserPasswordRequest,
 ):
     """Обновляет пароль пользователя по id"""
 
@@ -104,7 +104,7 @@ async def update_user_password(
     if user.id == current_user.id:
         # Сверить old_password
         if not verify_password(
-            plain_password=old_password,
+            plain_password=password_data.old_password,
             hashed_password=current_user.password_hash,
         ):
             raise HTTPException(
@@ -120,7 +120,7 @@ async def update_user_password(
                 detail="Нельзя изменить пароль другому администратору",
             )
     # Записать новый пароль
-    user.password_hash = get_password_hash(new_password)
+    user.password_hash = get_password_hash(password_data.new_password)
     await user.save()
 
     return {"message": "Пароль обновлен"}
