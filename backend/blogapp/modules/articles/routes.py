@@ -3,6 +3,8 @@ from typing import Annotated
 
 from beanie import PydanticObjectId
 from beanie.odm.enums import SortDirection
+from beanie.odm.operators.find.array import All
+from beanie.odm.operators.find.evaluation import Text
 from fastapi import APIRouter, Depends, Query
 
 from .models import (
@@ -28,18 +30,27 @@ async def list_articles(
     limit: Annotated[int | None, Query(ge=1)] = None,  # >= 1
     sort_by: Annotated[ArticlesSortField, Query()] = ArticlesSortField.created_at.value,
     sort_order: Annotated[SortDirection, Query()] = SortDirection.DESCENDING.value,
+    tag: Annotated[str | None, Query(description="Тег для поиска статей")] = None,
+    search_query: Annotated[
+        str | None, Query(description="Поисковый запрос для поиска статей")
+    ] = None,
 ):
     """Возвращает список статей."""
 
-    # TODO добавить проекции
+    # Базовый запрос
+    query = ArticleDocument.find()
+    # Поиск по текстовому запросу
+    if search_query:
+        query = query.find(Text(search_query))
+    # Поиск по тегу
+    if tag:
+        query = query.find(All(ArticleDocument.tags, [tag]))
+    # Сортировка, пагинация
+    query = query.sort((sort_by, sort_order)).skip(n=skip).limit(n=limit)
+    # TODO Исправить fetch_links после выхода патча [баг версии 1.21.0]
+    # query = query.find(fetch_links=True)
     # Получение списка статей
-    articles = (
-        await ArticleDocument.find(fetch_links=True)
-        .sort((sort_by, sort_order))
-        .skip(n=skip)
-        .limit(n=limit)
-        .to_list(length=None)
-    )
+    articles = await query.to_list(length=None)
 
     return {"articles": articles}
 

@@ -13,15 +13,21 @@ from ..core.security.roles import RolesEnum
 class ExtendedDocument(Document):
     """Подкласс Document из библиотеки beanie с дополнительными методами для расширенного функционала."""
 
-    def check_user_can_modify_document(self, current_user: UserBase) -> UserBase:
+    def check_user_can_modify_document(self, current_user: UserBase) -> None:
         """
         Проверяет, может ли пользователь редактировать документ.
-        :return: UserDocument
         :raise HTTPException: если нет прав на изменение
         """
-        # Разрешить администратору или владельцу
-        if current_user.role == RolesEnum.ADMIN or self.author.id == current_user.id:
-            return current_user
+        # Разрешить администратору
+        if current_user.role == RolesEnum.ADMIN:
+            return
+        # Разрешить редактировать свой документ
+        if current_user.id == self.id:
+            return
+        # Разрешить редактировать документы за своим авторством
+        if hasattr(self, "author"):
+            if current_user.id == self.author.id:
+                return
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden")
 
     @classmethod
@@ -44,17 +50,12 @@ class ExtendedDocument(Document):
         current_user: UserBase,
         update_data: BaseModel,
     ):
-        """Обновляет документ по его ID. У документа должен быть author."""
+        """Обновляет документ по его ID. Перед выполнением вызывает check_user_can_modify_document"""
 
         # Получение данных
         document = await cls.get_or_404(document_id=document_id, fetch_links=True)
         # Проверка прав редактирования
-        try:
-            _current_user = document.check_user_can_modify_document(
-                current_user=current_user
-            )
-        except Exception:
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        document.check_user_can_modify_document(current_user)
         # Обновление данных
         document = document.model_copy(
             update=update_data.model_dump(exclude_unset=True)
@@ -71,17 +72,12 @@ class ExtendedDocument(Document):
         current_user: UserBase,
         link_fields_to_delete: list[str] | None = None,
     ) -> Response:
-        """Удаляет документ по его ID. У документа должен быть author."""
+        """Удаляет документ по его ID. Перед выполнением вызывает check_user_can_modify_document"""
 
         # Поиск документа
         document = await cls.get_or_404(document_id=document_id, fetch_links=True)
         # Проверка прав редактирования
-        try:
-            _current_user = document.check_user_can_modify_document(
-                current_user=current_user
-            )
-        except Exception:
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        document.check_user_can_modify_document(current_user)
         # Удаление ссылок
         for field_name in link_fields_to_delete:
             document_field_to_delete = getattr(document, field_name, None)
