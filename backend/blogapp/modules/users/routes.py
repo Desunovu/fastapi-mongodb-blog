@@ -2,7 +2,7 @@ from typing import Annotated
 
 from beanie import PydanticObjectId
 from beanie.odm.enums import SortDirection
-from fastapi import APIRouter, Depends, Query, Path, HTTPException
+from fastapi import APIRouter, Depends, Query, Path, HTTPException, Body
 from starlette import status
 
 from .models import (
@@ -147,3 +147,33 @@ async def disable_user(
     await user.save()
 
     return {"message": "Пользователь успешно отключен"}
+
+
+@router.put("/{user_id}/role")
+async def change_user_role(
+    _current_user: Annotated[
+        UserDocument, Depends(RoleChecker(allowed_role=RolesEnum.ADMIN.value))
+    ],
+    user_id: Annotated[str, Path(description="UUID пользователя")],
+    role: Annotated[RolesEnum, Body(embed=True, description="Роль")],
+):
+    """Изменить роль пользователя по id [АДМИНИСТРАТОР]"""
+
+    user = await UserDocument.get_or_404(document_id=user_id)
+    # Запретить назначать администраторов
+    if role == RolesEnum.ADMIN.value:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Нельзя назначить роль администратора",
+        )
+    # Запретить изменять роль администраторов
+    if user.role == RolesEnum.ADMIN.value:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Нельзя менять роль администратора",
+        )
+    # Изменить роль
+    user.role = role
+    await user.save()
+
+    return {"message": f"Пользователю назначена роль {role.value}"}
