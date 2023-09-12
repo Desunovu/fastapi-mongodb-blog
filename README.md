@@ -9,7 +9,7 @@ Educational project on developing a blog. The main goal of the project is to uti
 - **Programming Language**: Python
 - **Web Framework**: [FastAPI](https://fastapi.tiangolo.com/)
 - **Database**: MongoDB (with [Beanie ODM](https://beanie-odm.dev/))
-- **Frontend**: _Not selected yet_
+- **Frontend**: Vue.js
 - **Honorable mention**: OAuth 2.0 JWT
 
 ## Project Functionality
