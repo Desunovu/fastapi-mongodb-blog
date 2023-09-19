@@ -21,13 +21,6 @@ class AuthService {
     const tokenResponse = await DefaultService.loginForAccessTokenTokenPost({
       username: username,
       password: password
-    }).catch((error) => {
-      if (error instanceof ApiError) {
-        Notify.create(error.message)
-      } else {
-        Notify.create(error)
-      }
-      throw error
     })
 
     // Сохранение токена в tokenStorage
