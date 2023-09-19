@@ -4,12 +4,11 @@ import { useTokenStore } from '@/stores/TokenStore'
 import { useUserStore } from '@/stores/UserStore'
 import { Notify } from 'quasar'
 
-const userStore = useUserStore()
-const tokenStore = useTokenStore()
 
 class AuthService {
-  
   async update_user_info() {
+    const userStore = useUserStore()
+
     // Получение пользователя
     const userResponse = await DefaultService.readCurrentUserUsersMeGet()
     // Запись пользователя
@@ -17,6 +16,8 @@ class AuthService {
   }
 
   async login(username: string, password: string) {
+    const tokenStore = useTokenStore()
+
     // Получение токена
     const tokenResponse = await DefaultService.loginForAccessTokenTokenPost({
       username: username,
@@ -30,7 +31,6 @@ class AuthService {
       }
       throw error
     })
-    // TODO Переместить в обработчик ошибок
 
     // Сохранение токена в tokenStorage
     tokenStore.saveToken(tokenResponse.access_token)
@@ -41,13 +41,6 @@ class AuthService {
 
     router.push({path: '/'})
   }
-
-  logout() {
-    userStore.removeUser()
-    tokenStore.removeToken()
-    OpenAPI.TOKEN = undefined
-  }
-
 }
 
 export default new AuthService()
