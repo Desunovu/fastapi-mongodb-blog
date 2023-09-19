@@ -32,7 +32,7 @@ const userStore = useUserStore()
     </q-header>
 
     <q-page-container
-      class="window-height window-width row justify-center items-center"
+      class="row justify-center items-center"
       style="background: linear-gradient(#4c4c4c, #191919)"
     >
       <RouterView />
