@@ -4,7 +4,6 @@ import { useTokenStore } from '@/stores/TokenStore'
 import { useUserStore } from '@/stores/UserStore'
 import { Notify } from 'quasar'
 
-
 class AuthService {
   async update_user_info() {
     const userStore = useUserStore()
@@ -22,11 +21,10 @@ class AuthService {
     const tokenResponse = await DefaultService.loginForAccessTokenTokenPost({
       username: username,
       password: password
-    }).catch(error => {
+    }).catch((error) => {
       if (error instanceof ApiError) {
         Notify.create(error.message)
-      }
-      else {
+      } else {
         Notify.create(error)
       }
       throw error
@@ -39,7 +37,16 @@ class AuthService {
 
     await this.update_user_info()
 
-    router.push({path: '/'})
+    router.push({ path: '/' })
+  }
+
+  logout() {
+    const userStore = useUserStore()
+    const tokenStore = useTokenStore()
+
+    userStore.removeUser()
+    tokenStore.removeToken()
+    OpenAPI.TOKEN = undefined
   }
 }
 
