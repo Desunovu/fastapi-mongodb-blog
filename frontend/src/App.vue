@@ -7,14 +7,15 @@ const userStore = useUserStore()
 </script>
 
 <template>
-  <q-layout view="hHh lpR fFf">
-    <q-header reveal elevated class="bg-primary text-white">
+  <q-layout view="lHh Lpr lFf" class="WAL bg-image">
+    <q-header reveal elevated>
       <q-toolbar>
         <q-toolbar-title>
           <q-avatar>
             <img src="https://img.icons8.com/3d-fluency/94/disguised-face-1.png" />
           </q-avatar>
-          fastapi-mongodb-vue-blog by Desunovu
+          <q-btn to="/" stretch flat>fastapi-mongodb-vue-blog</q-btn>
+          <router-link to="/about" custom>by Desunovu</router-link>
         </q-toolbar-title>
 
         <q-space />
@@ -31,13 +32,24 @@ const userStore = useUserStore()
       </q-toolbar>
     </q-header>
 
-    <q-page-container
-      class="row justify-center items-center"
-      style="background: linear-gradient(#4c4c4c, #191919)"
-    >
-      <RouterView />
+    <q-page-container class="window-hight row justify-center">
+      <div style="max-width: 700px">
+        <RouterView />
+      </div>
     </q-page-container>
   </q-layout>
 </template>
 
-<style></style>
+<style>
+.bg-image {
+  background-image: url(https://img.freepik.com/free-vector/black-triangles-pattern_1060-57.jpg);
+  background-repeat: repeat;
+  background-size: contain;
+}
+.WAL {
+  width: 100%;
+  height: 100%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+</style>
