@@ -33,7 +33,7 @@ const userStore = useUserStore()
     </q-header>
 
     <q-page-container class="window-hight row justify-center">
-      <div style="max-width: 700px">
+      <div style="min-width: 700px; max-width: 700px">
         <RouterView />
       </div>
     </q-page-container>
