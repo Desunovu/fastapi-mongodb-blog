@@ -20,15 +20,16 @@ const userStore = useUserStore()
 
         <q-space />
 
-        <q-btn to="/" stretch flat label="Все статьи" />
-        <template v-if="!userStore.user">
+        <div v-if="!userStore.user">
           <q-btn to="/login" stretch flat label="Войти" />
           <q-btn to="/register" stretch flat label="Зарегестрироваться" />
-        </template>
-        <template v-else>
+        </div>
+        <div v-else>
+          <q-btn to="/create-article" label="Написать статью" flat class="text-info"/>
+          <q-btn to="/" stretch flat label="Все статьи" />
           <q-btn to="/profile" stretch flat>{{ userStore.user?.username }}</q-btn>
           <q-btn to="/logout" stretch flat label="Выйти" />
-        </template>
+        </div>
       </q-toolbar>
     </q-header>
 

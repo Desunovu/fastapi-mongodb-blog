@@ -18,6 +18,6 @@ onMounted(async () => {
 
 <template>
   <q-page padding>
-    <SingleArticle :article="article" />
+    <SingleArticle v-if="article" :article="article" />
   </q-page>
 </template>
