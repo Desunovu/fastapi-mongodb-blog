@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { DefaultService, type UserDocument } from '@/client'
 import AuthService from '@/services/AuthService'
-import { beforeEach } from 'node:test'
 import { Notify } from 'quasar'
 import { ref } from 'vue'
 
