@@ -3,6 +3,9 @@ venv/
 /.idea/
 *.pyc
 
+# env
+*.env
+
 # Logs
 logs
 *.log

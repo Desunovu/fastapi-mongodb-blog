@@ -26,7 +26,7 @@ app.use(Quasar, {
 })
 
 const tokenStore = useTokenStore()
-OpenAPI.BASE = 'http://localhost:8000'
+OpenAPI.BASE = import.meta.env.VITE_API_URL
 OpenAPI.TOKEN = tokenStore.token
 
 // Global error handler
@@ -40,10 +40,10 @@ app.config.errorHandler = (error, instance, info) => {
     Notify.create(error.message)
     if (error.status == 401) {
       AuthService.logout()
-      router.push("/login")
+      router.push('/login')
     }
     if (error.status == 404) {
-      router.push("/page-not-found")
+      router.push('/page-not-found')
     }
     // if (error.status == 422) {
     //   router.push("/validation-error")

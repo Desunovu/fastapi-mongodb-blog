@@ -1,30 +1,54 @@
-# Blog development using Fast API and MongoDB
+# Blog development using Fast API, Vue.js and MongoDB
 
-## Description
+## Introduction
 
-Educational project on developing a blog. The main goal of the project is to utilize a NoSQL database and implement asynchronous CRUD operations.
+This project is an educational project for developing a blog using Fast API, Vue.js and MongoDB. The main goal of the project is to demonstrate the use of a NoSQL database and asynchronous CRUD operations.
 
 ## Technology Stack
 
-- **Programming Language**: Python
-- **Web Framework**: [FastAPI](https://fastapi.tiangolo.com/)
-- **Database**: MongoDB (with [Beanie ODM](https://beanie-odm.dev/))
-- **Frontend**: Vue.js
-- **Honorable mention**: OAuth 2.0 JWT
+- **Programming Languages**: Python, TypeScript/JavaScript
+- **Backend Web Framework**: [FastAPI](https://fastapi.tiangolo.com/)
+- **Database**: MongoDB (used with  [Beanie ODM](https://beanie-odm.dev/))
+- **Frontend Web Framework**: Vue.js (with [Quasar](https://quasar.dev/), [Pinia](https://pinia.vuejs.org/), [OpenAPI Typescript Codegen](https://github.com/ferdikoomen/openapi-typescript-codegen))
+- **Honorable mention**:  OAuth 2.0 JWT Bearer Flow, Nginx
 
 ## Project Functionality
+1. **Registration and Authentication**: Users can register and authenticate using OAuth 2.0 JWT.
+2. **Profile Management**: Users can manage their profiles, including changing passwords and updating information. Administrators can also manage users.
+3. **Blog Management**: Users can create, edit, and delete blog articles.
+4. **Viewing Articles**: Articles can be viewed as a list and in detail. Pagination and sorting are supported for displaying a large number of articles.
+5. **Tags and Filters**: Articles can be filtered by tags, and users can add tags to articles.
+6. **Search**: Search for articles using keywords.
+7. **Comments**: Users can add comments and reply to them.
 
-- User registration and authentication :white_check_mark:
-- Hierarchical Role-Based Access Control :white_check_mark:
-- Users can manage their profiles, including changing passwords and updating their information. Administrators can manage users :white_check_mark:
-- Creation, editing, and deletion of blog articles :white_check_mark:
-- Display of article list and their details :white_check_mark:
-- Pagination and sort support for displaying a large number of articles :white_check_mark:
-- Ability to add tags to articles and filter by tags :white_check_mark:
-- Search for articles using keywords :white_check_mark:
-- Adding comments/replies to articles :white_check_mark:
 
-## Project Implementation Steps
+## Installation and Local Setup
+To run this project locally, you can use Docker Compose. Make sure you have Docker and Docker Compose installed on your system.
 
-Here is the link to the Milestones:
-[Milestones](https://github.com/Desunovu/fastapi-mongodb-blog/milestones)
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/Desunovu/fastapi-vue-blog.git
+   cd fastapi-vue-blog
+   ```
+2. Open the `.env.production` file located in the project's root directory using a text editor. Set the `SECRET_KEY` variable in this file to a secure secret key for your application. For example:
+
+   ```dotenv
+   SECRET_KEY=mysecretkey
+   ```
+   Ensure that the SECRET_KEY value is kept secret and not shared publicly.
+
+
+3. Build and start the application containers using Docker Compose:
+   ```bash
+   docker-compose up --build
+   ```
+   This command will download the necessary Docker images, build the application, and start the containers.
+
+## Accessing the Application
+- Vue App: http://localhost:8080
+- API Documentation: http://localhost:8000/docs
+
+## License
+
+This project is distributed under the [MIT License](LICENSE).

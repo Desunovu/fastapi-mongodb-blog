@@ -212,7 +212,7 @@ onBeforeMount(() => {
             <div class="col items-start">
               <!-- Информация об авторе ответа и времени его создания -->
               <div class="row justify-between">
-                <div class="col">@{{ reply.author.username ?? '' }}</div>
+                <div class="col">@{{ reply.author?.username ?? '' }}</div>
                 <div class="col-stretch text-right">
                   {{ comment.updated_at ? '(изменено)' : '' }}
                   {{ moment(comment.created_at).format('hh:mm DD-MM-YYYY') }}
@@ -227,7 +227,7 @@ onBeforeMount(() => {
               <!-- Кнопка для удаления ответа -->
               <div class="row justify-end">
                 <q-btn
-                  v-if="checkUserCanModifyComment(reply.author._id ?? reply.author.id)"
+                  v-if="checkUserCanModifyComment(reply.author?._id ?? reply.author?.id!)"
                   @click="handleDeleteCommentButtonClick(reply._id ?? reply.id)"
                   label="Удалить"
                   icon-right="clear"

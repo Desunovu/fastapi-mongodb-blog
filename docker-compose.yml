@@ -1,0 +1,53 @@
+version: '3.9'
+services:
+  # Vue.js app
+  frontend:
+    container_name: blog-vue-frontend
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "8080:80"
+    networks:
+      - custom
+    depends_on:
+      - backend
+
+  # FastAPI app
+  backend:
+    container_name: blog-fastapi-backend
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      APP_MODE: production
+    env_file:
+      - .env.production
+    ports:
+      - "8000:8000"
+    networks:
+      - custom
+    depends_on:
+      - mongodb
+
+  # MongoDB
+  mongodb:
+    image: mongo:6.0.8
+    container_name: blog-mongodb
+    restart: always
+    env_file:
+      - .env.production
+    ports:
+      - "27017:27017"
+    volumes:
+      - blog_mongo_data:/data/db
+    networks:
+      - custom
+
+volumes:
+  blog_mongo_data:
+    name: blog_mongo_data
+
+networks:
+  custom:
+    driver: bridge

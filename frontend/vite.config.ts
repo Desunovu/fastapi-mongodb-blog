@@ -6,11 +6,14 @@ import { quasar, transformAssetUrls } from '@quasar/vite-plugin'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    host: true,
+    port: 8080
+  },
   plugins: [
     vue({
       template: { transformAssetUrls }
     }),
-
     quasar({
       sassVariables: 'src/quasar-variables.sass'
     })
