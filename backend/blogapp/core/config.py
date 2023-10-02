@@ -38,3 +38,7 @@ LOGGER_NAME: str = "blogapp"
 LOG_FORMAT: str = "%(levelprefix)s | %(asctime)s | %(message)s"
 LOGS_DIR_PATH: Path = BACKEND_DIR_PATH / "logs"
 LOG_FILE_PATH: Path = LOGS_DIR_PATH / f"""{time.strftime("%Y%m%d-%H%M%S")}.log"""
+
+# Аватары пользователей
+DEFAULT_AVATAR_URL: str = "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+AVATAR_PROVIDER_URL: str = "https://cdn-icons-png.flaticon.com"

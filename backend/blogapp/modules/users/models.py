@@ -5,6 +5,7 @@ from typing import Annotated
 from fastapi import Body
 from pydantic import EmailStr, Field, BaseModel
 
+from ...core.config import DEFAULT_AVATAR_URL
 from ...core.security.models import UserBase
 from ...core.security.roles import RolesEnum
 from ...utils.extended_document import ExtendedDocument
@@ -18,6 +19,7 @@ class UserDocument(ExtendedDocument, UserBase):
     created_at: datetime | None = None
     updated_at: datetime | None = None
     password_hash: str | None = Field(default=None, exclude=True)
+    avatar_url: str | None = Field(default=DEFAULT_AVATAR_URL)
 
     class Settings:
         name = "users"
@@ -26,7 +28,8 @@ class UserDocument(ExtendedDocument, UserBase):
 class UpdateUserRequest(BaseModel):
     """Модель для обновления информации о пользователе"""
 
-    email: EmailStr
+    email: EmailStr | None = None
+    avatar_url: str | None = None
 
 
 class UpdateUserPasswordRequest(BaseModel):
