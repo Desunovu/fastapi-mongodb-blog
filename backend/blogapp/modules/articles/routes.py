@@ -38,7 +38,7 @@ async def list_articles(
     """Возвращает список статей."""
 
     # Базовый запрос
-    query = ArticleDocument.find()
+    query = ArticleDocument.find(fetch_links=True)
     # Поиск по текстовому запросу
     if search_query:
         query = query.find(Text(search_query))
@@ -47,8 +47,6 @@ async def list_articles(
         query = query.find(All(ArticleDocument.tags, [tag]))
     # Сортировка, пагинация
     query = query.sort((sort_by, sort_order)).skip(n=skip).limit(n=limit)
-    # TODO Исправить fetch_links после выхода патча [баг версии 1.21.0]
-    # query = query.find(fetch_links=True)
     # Получение списка статей
     articles = await query.to_list(length=None)
 

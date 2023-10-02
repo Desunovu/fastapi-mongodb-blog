@@ -41,7 +41,6 @@ async def list_comments(
     comments = (
         await CommentDocument.find(
             CommentDocument.article.id == article_id,
-            # TODO FIX BUG с fetch в версии beanie 1.21
             fetch_links=True,
         )
         .sort((sort_by, sort_order))
@@ -67,7 +66,6 @@ async def create_comment(
     comment = CommentDocument(
         author=current_user,
         article=article,
-        replies=[],
         created_at=datetime.utcnow(),
         **comment_data.model_dump(),
     )

@@ -15,8 +15,7 @@ class CommentDocument(ExtendedDocument):
     disabled: bool = False
     is_reply: bool = False
     article: Link[ArticleDocument] | None = Field(None, exclude=True)
-    # TODO Вернуть Optional None к replies после выхода исправления бага fetch в beanie
-    replies: list[Link["CommentDocument"]] = []
+    replies: list[Link["CommentDocument"]] | None = None
     created_at: datetime | None = None
     updated_at: datetime | None = None
 
