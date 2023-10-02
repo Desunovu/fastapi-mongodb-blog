@@ -1,4 +1,4 @@
-from core.config import AVATAR_PROVIDER_URL
+from ..core.config import AVATAR_PROVIDER_URL
 
 
 def is_valid_avatar_url(avatar_url: str):
