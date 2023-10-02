@@ -1,6 +1,7 @@
 import logging
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from .core.database.mongodb import init_odm
 from .core.logging import init_loggers
@@ -12,6 +13,18 @@ from .modules.users.routes import router as users_router
 init_loggers()
 
 app = FastAPI()
+
+origins = [
+    "*"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 log = logging.getLogger("blogapp")
 
