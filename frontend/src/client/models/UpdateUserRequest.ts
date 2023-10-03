@@ -7,5 +7,6 @@
  * Модель для обновления информации о пользователе
  */
 export type UpdateUserRequest = {
-    email: string;
+    email?: (string | null);
+    avatar_url?: (string | null);
 };

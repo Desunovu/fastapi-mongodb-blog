@@ -392,7 +392,7 @@ userId: string,
 
     /**
      * Update User
-     * Обновляет пользователя по id
+     * Обновляет данные пользователя по id
      * @param userId UUID Пользователя
      * @param requestBody 
      * @returns UserResponse Successful Response

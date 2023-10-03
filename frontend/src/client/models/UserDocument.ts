@@ -9,11 +9,12 @@ export type UserDocument = {
     /**
      * MongoDB document ObjectID
      */
-    _id: (string | null);
+    _id?: (string | null);
     username: string;
     email: string;
-    role: (RolesEnum | null);
-    disabled: (boolean | null);
-    created_at: (string | null);
-    updated_at: (string | null);
+    role?: (RolesEnum | null);
+    disabled?: (boolean | null);
+    created_at?: (string | null);
+    updated_at?: (string | null);
+    avatar_url?: (string | null);
 };

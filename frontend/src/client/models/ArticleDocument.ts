@@ -7,13 +7,13 @@ export type ArticleDocument = {
     /**
      * MongoDB document ObjectID
      */
-    _id: (string | null);
-    title: (string | null);
-    content: (string | null);
-    tags: (Array<string> | null);
-    created_at: (string | null);
-    updated_at: (string | null);
-    author: ({
+    _id?: (string | null);
+    title?: (string | null);
+    content?: (string | null);
+    tags?: (Array<string> | null);
+    created_at?: (string | null);
+    updated_at?: (string | null);
+    author?: ({
 id: string;
 collection: string;
 } | null);
