@@ -14,7 +14,7 @@ const props = defineProps({
       :key="article._id ?? ''"
       class="row items-start bg-secondary"
     >
-      <UserItemSection />
+      <UserItemSection :user="article.author"/>
 
       <q-item-section class="col column items-start">
         <q-item-label header lines="1" class="text-h5">

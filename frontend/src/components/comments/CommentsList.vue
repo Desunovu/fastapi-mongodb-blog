@@ -138,7 +138,7 @@ onBeforeMount(() => {
         class="column"
       >
         <div class="row shadow-5 q-pa-xs">
-          <UserItemSection small class="self-start" />
+          <UserItemSection :user="comment.author" small class="self-start" />
           <div class="col items-start">
             <!-- Информация об авторе комментария и времени его создания -->
             <div class="row justify-between items-center">
@@ -208,7 +208,7 @@ onBeforeMount(() => {
             :class="{ 'disabled-item': isCommentDisabled(reply._id ?? reply.id) }"
             class="row shadow-2 q-my-xs q-pa-sm"
           >
-            <UserItemSection small class="self-start" />
+            <UserItemSection :user="reply.author" small class="self-start" />
             <div class="col items-start">
               <!-- Информация об авторе ответа и времени его создания -->
               <div class="row justify-between">

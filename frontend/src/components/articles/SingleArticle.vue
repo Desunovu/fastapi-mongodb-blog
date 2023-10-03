@@ -29,7 +29,7 @@ onMounted(() => {
 
 <template>
   <q-item class="row items-start bg-secondary q-pt-lg">
-    <UserItemSection />
+    <UserItemSection :user="article?.author" />
 
     <q-item-section class="col column items-start">
       <q-item-label caption class="text-body self-end">

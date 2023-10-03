@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import type { UserDocument } from '@/client'
 import { computed } from 'vue'
 
 export interface Props {
+  user?: UserDocument | null
   small?: boolean
 }
 
@@ -9,11 +11,11 @@ const props = withDefaults(defineProps<Props>(), {
   small: () => false
 })
 
-const avatarSize = computed(() => {
+const avatarSizeStyle = computed(() => {
   return props.small ? '50px' : '100px'
 })
 
-const sectionWidth = computed(() => {
+const sectionWidthStyle = computed(() => {
   return props.small ? '70px' : '20%'
 })
 </script>
@@ -22,13 +24,23 @@ const sectionWidth = computed(() => {
   <q-item-section
     avatar
     class="column items-center justify-start"
-    :style="{ 'min-width': sectionWidth, 'max-width': sectionWidth }"
+    :style="{ 'min-width': sectionWidthStyle, 'max-width': sectionWidthStyle }"
   >
-    <q-avatar :size="avatarSize" rounded>
-      <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+    <q-avatar :size="avatarSizeStyle" rounded>
+      <q-img :src="user?.avatar_url!" />
     </q-avatar>
-    <q-item-label v-if="!small" class="text-body ellipsis text-white">
-      Лололошка | Официальный канал
-    </q-item-label>
+
+    <template v-if="!props.small">
+      <q-item-label
+        lines="1"
+        class="text-subtitle1 text-uppercase text-white text-weight-bold q-my-sm"
+      >
+        {{ user?.username }}
+      </q-item-label>
+      <q-item-label lines="1" class="text-subtitle2 text-white text-weight-bold q-my-sm">
+        <span v-if="user?.role == 'Author'" class="text-blue">Автор</span>
+        <span v-else-if="user?.role == 'Admin'" class="text-red">Администратор</span>
+      </q-item-label></template
+    >
   </q-item-section>
 </template>
