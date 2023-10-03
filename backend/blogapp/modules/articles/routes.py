@@ -84,7 +84,7 @@ async def read_article(
 
     # Получение данных
     article = await ArticleDocument.get_or_404(
-        document_id=article_id, fetch_links=False
+        document_id=article_id, fetch_links=True
     )
     return {"article": article}
 
