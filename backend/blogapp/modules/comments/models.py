@@ -15,7 +15,7 @@ class CommentDocument(ExtendedDocument):
     disabled: bool = False
     is_reply: bool = False
     article: Link[ArticleDocument] | None = Field(None, exclude=True)
-    replies: list[Link["CommentDocument"]] | None = None
+    replies: list[Link["CommentDocument"]] = []
     created_at: datetime | None = None
     updated_at: datetime | None = None
 
