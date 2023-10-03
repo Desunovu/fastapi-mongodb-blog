@@ -11,6 +11,8 @@ def is_valid_avatar_url(avatar_url: str):
     Возвращает:
         bool: True, если URL аватара начинается с URL-адреса провайдера аватаров, в противном случае False.
     """
+    if avatar_url is None:
+        return True
     if avatar_url.startswith(AVATAR_PROVIDER_URL):
         return True
     return False
