@@ -3,9 +3,10 @@ import { DefaultService, type UserDocument } from '@/client'
 import AuthService from '@/services/AuthService'
 import { Notify } from 'quasar'
 import { ref } from 'vue'
+import UserItemSection from './UserItemSection.vue'
 
 export interface Props {
-  user: UserDocument | undefined
+  user: UserDocument
   editable?: boolean
   isProfile?: boolean
 }
@@ -15,18 +16,44 @@ const props = withDefaults(defineProps<Props>(), {
   editable: () => false
 })
 
-const emailDialog = ref(false)
-const passwordDialog = ref(false)
-const newEmail = ref()
-const newPassword = ref()
-const oldPassword = ref()
+const showEmailDialog = ref(false)
+const showPasswordDialog = ref(false)
+const showAvatarDialog = ref(false)
+const newEmail = ref<string>()
+const newPassword = ref<string>('')
+const oldPassword = ref<string>('')
+const avatarsToChoose = ref<string[]>([])
+
+async function loadAvatarsToChoose() {
+  const avatarsResponse = {
+    avatars: [
+      'https://cdn-icons-png.flaticon.com/512/149/149071.png',
+      'https://cdn-icons-png.flaticon.com/512/149/149072.png',
+      'https://cdn-icons-png.flaticon.com/512/149/149074.png'
+    ]
+  }
+  avatarsToChoose.value = avatarsResponse.avatars
+}
+
+async function handleAvatarUpdate(avatarUrl: string) {
+  const updateAvatarResponse = await DefaultService.updateUserUsersUserIdPut(props.user._id!, {
+    avatar_url: avatarUrl
+  })
+  Notify.create(
+    'Установлен аватар: ' + updateAvatarResponse.user.avatar_url + '. Перезагрузите страницу'
+  )
+}
+
+async function prepareAvatarDialog() {
+  showAvatarDialog.value = true
+  await loadAvatarsToChoose()
+}
 
 async function handleEmailUpdate() {
-  const updateEmailResponse = await DefaultService.updateUserUsersUserIdPut(props.user?._id ?? '', {
+  const updateEmailResponse = await DefaultService.updateUserUsersUserIdPut(props.user._id!, {
     email: newEmail.value
   })
-  Notify.create('Установлен E-mail: ' + updateEmailResponse.user.email)
-  // TODO Вызвать ре-рендер родительского компонента
+  Notify.create('Установлен E-mail: ' + updateEmailResponse.user.email + '. Перезагрузите страницу')
 
   if (props.isProfile) {
     AuthService.update_user_info()
@@ -34,31 +61,30 @@ async function handleEmailUpdate() {
 }
 
 async function handlePasswordUpdate() {
-  const updatePasswordResponse = await DefaultService.updateUserPasswordUsersUserIdPasswordPut(
-    props?.user?._id ?? '',
-    { old_password: oldPassword.value, new_password: newPassword.value }
-  )
+  await DefaultService.updateUserPasswordUsersUserIdPasswordPut(props.user._id!, {
+    old_password: oldPassword.value,
+    new_password: newPassword.value
+  })
   Notify.create('Установлен новый пароль!')
 }
 </script>
 
 <template>
   <q-item class="row justify-start items-start q-pt-lg bg-secondary">
-    <q-item-section class="col-shrink column items-center">
-      <q-avatar size="150px" rounded>
-        <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
-      </q-avatar>
-      <q-item-label class="text-body1 text-white">{{ user?.role }}</q-item-label>
-      <q-item-label v-if="user?.disabled" caption class="text-white">ЗАБЛОКИРОВАН</q-item-label>
+    <UserItemSection :user="user" class="col" />
+    <q-item-section class="col-grow items-start" style="overflow: auto">
+      <q-item-label lines="1" class="text-h5 text-white">
+        {{ user?.email }}
+      </q-item-label>
+      <q-item-label class="text-caption text-white">
+        ***Раздел для прочей информации о пользователе***
+      </q-item-label>
     </q-item-section>
-
-    <q-item-section class="col-grow column" style="overflow: auto">
-      <q-item-label class="text-h3 text-info">{{ user?.username }}</q-item-label>
-      <q-item-label class="text-h6 text-white">{{ user?.email }}</q-item-label>
+    <q-item-section class="col-4" style="overflow: auto">
       <q-btn
         v-if="editable"
         label="Изменить E-mail"
-        @click="emailDialog = true"
+        @click="showEmailDialog = true"
         class="self-stretch"
         align="left"
         flat
@@ -66,14 +92,23 @@ async function handlePasswordUpdate() {
       <q-btn
         v-if="editable"
         label="Изменить пароль"
-        @click="passwordDialog = true"
+        @click="showPasswordDialog = true"
+        class="self-stretch"
+        align="left"
+        flat
+      />
+
+      <q-btn
+        v-if="editable"
+        label="Изменить аватар"
+        @click="prepareAvatarDialog"
         class="self-stretch"
         align="left"
         flat
       />
     </q-item-section>
 
-    <q-dialog v-model="emailDialog">
+    <q-dialog v-model="showEmailDialog">
       <q-card class="bg-secondary" style="width: 100%">
         <q-card-section class="q-pt-lg">
           <q-input
@@ -90,7 +125,7 @@ async function handlePasswordUpdate() {
       </q-card>
     </q-dialog>
 
-    <q-dialog v-model="passwordDialog">
+    <q-dialog v-model="showPasswordDialog">
       <q-card class="bg-secondary" style="width: 100%">
         <q-card-section class="q-pt-lg">
           <q-input
@@ -113,6 +148,23 @@ async function handlePasswordUpdate() {
         </q-card-actions>
       </q-card>
     </q-dialog>
+
+    <q-dialog v-model="showAvatarDialog">
+      <q-card class="bg-secondary" style="width: 100%">
+        <q-card-section class="q-pt-lg">
+          <!-- Надпись по центру "выберите аватар" -->
+          <div class="text-center text-h6 text-white q-mb-md">Выберите аватар</div>
+          <q-btn
+            v-for="avatarUrl in [...avatarsToChoose, ...avatarsToChoose, ...avatarsToChoose]"
+            :key="avatarUrl"
+            @click="handleAvatarUpdate(avatarUrl)"
+            v-close-popup
+            flat
+          >
+            <img :src="avatarUrl" style="width: 100px" />
+          </q-btn>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </q-item>
 </template>
-s
