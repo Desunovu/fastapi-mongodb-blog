@@ -20,11 +20,12 @@ if mode == "development":
 elif mode == "production":
     print(f"[PROD MODE]")
 
-# Определение констант из переменных окружения
-SECRET_KEY = os.getenv("SECRET_KEY")
-LOGGING_LEVEL = os.getenv("LOGGING_LEVEL")
+# Определение констант приложения
+SECRET_KEY = os.getenv("SECRET_KEY", "")
+FASTAPI_CREATE_TEST_USERS = os.getenv("FASTAPI_CREATE_TEST_USERS", "DEV")
+LOGGING_LEVEL = os.getenv("LOGGING_LEVEL", "DEBUG")
 MONGODB_URL = os.getenv("MONGODB_URL", "")
-MONGODB_DATABASE = os.getenv("MONGODB_DATABASE")
+MONGODB_DATABASE = os.getenv("MONGODB_DATABASE", "")
 
 # Прочие константы
 ALGORITHM = "HS256"

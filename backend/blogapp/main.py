@@ -3,12 +3,14 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from .core.config import FASTAPI_CREATE_TEST_USERS
 from .core.database.mongodb import init_odm
 from .core.logging import init_loggers
 from .core.security import routes as security_routes
 from .modules.articles.routes import router as articles_router
 from .modules.comments.routes import router as comments_router
 from .modules.users.routes import router as users_router
+from .utils.create_users import create_test_users
 
 init_loggers()
 
@@ -32,7 +34,13 @@ log = logging.getLogger("blogapp")
 @app.on_event("startup")
 async def startup():
     await init_odm()
-    log.info("Выполнены задачи startup event'а")
+    log.info("Инициализация ODM завершена")
+
+    if FASTAPI_CREATE_TEST_USERS == "True":
+        await create_test_users()
+        log.info("Проверка тестовых пользователей завершена")
+
+    log.info("Выполнены подготовительные задачи при старте FastAPI")
 
 
 app.include_router(security_routes.router)
