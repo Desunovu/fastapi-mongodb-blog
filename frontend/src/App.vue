@@ -1,20 +1,19 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import NavbarMenu from './components/NavbarMenu.vue';
-import { useUserStore } from './stores/UserStore';
-
+import NavbarMenu from './components/NavbarMenu.vue'
+import { useUserStore } from './stores/UserStore'
 
 const userStore = useUserStore()
 </script>
 
 <template>
-  <q-layout view="lHh Lpr lFf" class="WAL bg-image">
+  <q-layout view="lHh Lpr lFf" class="WAL background-image">
     <q-header reveal elevated>
       <NavbarMenu :currentUser="userStore.user" />
     </q-header>
 
-    <q-page-container class="window-hight row justify-center">
-      <div style="min-width: 700px; max-width: 700px">
+    <q-page-container class="column items-center">
+      <div class="content-width">
         <RouterView />
       </div>
     </q-page-container>
@@ -22,15 +21,22 @@ const userStore = useUserStore()
 </template>
 
 <style>
-.bg-image {
-  background-image: url(https://img.freepik.com/free-vector/black-triangles-pattern_1060-57.jpg);
+.background-image {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+    url(https://img.freepik.com/free-vector/black-triangles-pattern_1060-57.jpg);
   background-repeat: repeat;
-  background-size: contain;
+  background-size: 700px;
+  background-color: rgba(0, 0, 0, 0.9);
 }
+
 .WAL {
-  width: 100%;
-  height: 100%;
   padding-top: 20px;
   padding-bottom: 20px;
+}
+
+/* Ограниение по ширине для всего контента сайта в процентах */
+.content-width {
+  min-width: 70%;
+  max-width: 100%;
 }
 </style>
