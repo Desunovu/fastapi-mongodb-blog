@@ -22,6 +22,7 @@ const sectionWidthStyle = computed(() => {
 
 <template>
   <q-item-section
+    v-if="user"
     avatar
     class="column items-center justify-start"
     :style="{ 'min-width': sectionWidthStyle, 'max-width': sectionWidthStyle }"

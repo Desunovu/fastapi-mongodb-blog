@@ -169,8 +169,8 @@ onBeforeMount(() => {
                 align="left"
               />
               <q-btn
-                v-if="checkUserCanModifyComment(comment.author._id ?? comment.author.id)"
-                @click="handleDeleteCommentButtonClick(comment._id! ?? comment._id)"
+                v-if="checkUserCanModifyComment(comment.author.id)"
+                @click="comment._id && handleDeleteCommentButtonClick(comment._id)"
                 label="Удалить"
                 icon-right="clear"
                 no-caps
@@ -204,15 +204,15 @@ onBeforeMount(() => {
           <!-- Отображение ответов на комментарий -->
           <q-item
             v-for="reply in comment.replies"
-            :key="reply._id ?? reply.id!"
-            :class="{ 'disabled-item': isCommentDisabled(reply._id ?? reply.id) }"
+            :key="reply.id"
+            :class="{ 'disabled-item': isCommentDisabled(reply.id) }"
             class="row shadow-2 q-my-xs q-pa-sm"
           >
             <UserItemSection :user="reply.author" small class="self-start" />
             <div class="col items-start">
               <!-- Информация об авторе ответа и времени его создания -->
               <div class="row justify-between">
-                <div class="col">@{{ reply.author?.username ?? '' }}</div>
+                <div class="col">@{{ reply.author.username }}</div>
                 <div class="col-stretch text-right">
                   {{ comment.updated_at ? '(изменено)' : '' }}
                   {{ moment(comment.created_at).format('hh:mm DD-MM-YYYY') }}
@@ -221,14 +221,14 @@ onBeforeMount(() => {
 
               <!-- Текст ответа -->
               <div class="text-white">
-                {{ reply.content ?? '' }}
+                {{ reply.content }}
               </div>
 
               <!-- Кнопка для удаления ответа -->
               <div class="row justify-end">
                 <q-btn
-                  v-if="checkUserCanModifyComment(reply.author?._id ?? reply.author?.id!)"
-                  @click="handleDeleteCommentButtonClick(reply._id ?? reply.id)"
+                  v-if="checkUserCanModifyComment(reply.author.id)"
+                  @click="handleDeleteCommentButtonClick(reply.id)"
                   label="Удалить"
                   icon-right="clear"
                   no-caps

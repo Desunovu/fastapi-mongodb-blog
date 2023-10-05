@@ -15,7 +15,10 @@ collection: string;
 };
     disabled?: boolean;
     is_reply?: boolean;
-    replies?: null;
+    replies?: Array<{
+id: string;
+collection: string;
+}>;
     created_at?: (string | null);
     updated_at?: (string | null);
 };

@@ -6,7 +6,7 @@ import { ref } from 'vue'
 import UserItemSection from './UserItemSection.vue'
 
 export interface Props {
-  user: UserDocument
+  user?: UserDocument | null
   editable?: boolean
   isProfile?: boolean
 }
@@ -36,9 +36,12 @@ async function loadAvatarsToChoose() {
 }
 
 async function handleAvatarUpdate(avatarUrl: string) {
-  const updateAvatarResponse = await DefaultService.updateUserUsersUserIdPut(props.user._id!, {
-    avatar_url: avatarUrl
-  })
+  const updateAvatarResponse = await DefaultService.updateUserUsersUserIdPut(
+    props.user._id ?? props.user.id,
+    {
+      avatar_url: avatarUrl
+    }
+  )
   Notify.create(
     'Установлен аватар: ' + updateAvatarResponse.user.avatar_url + '. Перезагрузите страницу'
   )
@@ -50,9 +53,12 @@ async function prepareAvatarDialog() {
 }
 
 async function handleEmailUpdate() {
-  const updateEmailResponse = await DefaultService.updateUserUsersUserIdPut(props.user._id!, {
-    email: newEmail.value
-  })
+  const updateEmailResponse = await DefaultService.updateUserUsersUserIdPut(
+    props.user._id ?? props.user.id,
+    {
+      email: newEmail.value
+    }
+  )
   Notify.create('Установлен E-mail: ' + updateEmailResponse.user.email + '. Перезагрузите страницу')
 
   if (props.isProfile) {
@@ -61,7 +67,7 @@ async function handleEmailUpdate() {
 }
 
 async function handlePasswordUpdate() {
-  await DefaultService.updateUserPasswordUsersUserIdPasswordPut(props.user._id!, {
+  await DefaultService.updateUserPasswordUsersUserIdPasswordPut(props.user._id ?? props.user.id, {
     old_password: oldPassword.value,
     new_password: newPassword.value
   })
