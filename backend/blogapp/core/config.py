@@ -4,9 +4,9 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-mode = os.getenv("APP_MODE", "development")
-if mode == "development":
-    # Загрузка переменных окружения из файла ".env.development в /backend"
+mode = os.getenv("FASTAPI_APP_MODE", "DEV")
+if mode == "DEV":
+    # Загрузка переменных окружения из файла ".env.development.example в /backend"
     # Не перезаписывает уже заданные переменные.
     # Переменные для prod устанавливаются в docker-compose.yml
     env_path = os.path.join(
@@ -17,15 +17,15 @@ if mode == "development":
     )
     print(f"[DEV MODE] Путь к файлу .env: {env_path}")
     load_dotenv_result = load_dotenv(dotenv_path=env_path)
-elif mode == "production":
+elif mode == "PROD":
     print(f"[PROD MODE]")
 
 # Определение констант приложения
-SECRET_KEY = os.getenv("SECRET_KEY", "")
+FASTAPI_SECRET_KEY = os.getenv("FASTAPI_SECRET_KEY", "")
 FASTAPI_CREATE_TEST_USERS = os.getenv("FASTAPI_CREATE_TEST_USERS", "DEV")
-LOGGING_LEVEL = os.getenv("LOGGING_LEVEL", "DEBUG")
-MONGODB_URL = os.getenv("MONGODB_URL", "")
-MONGODB_DATABASE = os.getenv("MONGODB_DATABASE", "")
+FASTAPI_LOGGING_LEVEL = os.getenv("FASTAPI_LOGGING_LEVEL", "DEBUG")
+FASTAPI_MONGODB_URL = os.getenv("FASTAPI_MONGODB_URL", "")
+FASTAPI_MONGODB_DATABASE = os.getenv("FASTAPI_MONGODB_DATABASE", "")
 
 # Прочие константы
 ALGORITHM = "HS256"

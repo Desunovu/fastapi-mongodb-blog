@@ -4,7 +4,9 @@ venv/
 *.pyc
 
 # env
-*.env
+*.env.*
+!.env.development.example
+!.env.production.example
 
 # Logs
 logs

@@ -6,6 +6,8 @@ import { quasar, transformAssetUrls } from '@quasar/vite-plugin'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // env dir should be in the parent level
+  envDir: "../.",
   server: {
     host: true,
     port: 8080

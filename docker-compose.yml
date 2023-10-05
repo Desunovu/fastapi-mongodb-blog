@@ -1,6 +1,5 @@
 version: '3.9'
 services:
-  # Vue.js app
   frontend:
     container_name: blog-vue-frontend
     build:
@@ -12,6 +11,9 @@ services:
       - custom
     depends_on:
       - backend
+    profiles:
+      - frontend-only
+      - full-deploy
 
   # FastAPI app
   backend:
@@ -20,7 +22,7 @@ services:
       context: .
       dockerfile: backend/Dockerfile
     environment:
-      APP_MODE: production
+      FASTAPI_APP_MODE: PROD
     env_file:
       - .env.production
     ports:
@@ -29,8 +31,11 @@ services:
       - custom
     depends_on:
       - mongodb
+    profiles:
+      - backend-only
+      - full-deploy
 
-  # MongoDB
+      # MongoDB
   mongodb:
     image: mongo:6.0.8
     container_name: blog-mongodb
@@ -43,6 +48,10 @@ services:
       - blog_mongo_data:/data/db
     networks:
       - custom
+    profiles:
+      - mongodb-only
+      - backend-only
+      - full-deploy
 
 volumes:
   blog_mongo_data:

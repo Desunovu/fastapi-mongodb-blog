@@ -31,19 +31,39 @@ To run this project locally, you can use Docker Compose. Make sure you have Dock
    git clone https://github.com/Desunovu/fastapi-vue-blog.git
    cd fastapi-vue-blog
    ```
-2. Open the `.env.production` file located in the project's root directory using a text editor. Set the `SECRET_KEY` variable in this file to a secure secret key for your application. For example:
+   
+
+2. Rename the example environment files located in the project's root directory:
+   - Rename `.env.production.example` to `.env.production`
+   - Rename `.env.development.example` to `.env.development`
+
+
+3. Open the newly created .env.production and .env.development files using a text editor. In these files, you can customize the variables according to your preferences. For example:
 
    ```dotenv
-   SECRET_KEY=mysecretkey
+   FASTAPI_SECRET_KEY=mysecretkey
+   FASTAPI_CHATGPT_ENDPOINT=https://api.openai.com
+   FASTAPI_CHATGPT_API_KEY=someapikey
+   FASTAPI_CREATE_TEST_USERS=true
+   FASTAPI_LOGGING_LEVEL=debug
    ```
-   Ensure that the SECRET_KEY value is kept secret and not shared publicly.
 
 
-3. Build and start the application containers using Docker Compose:
+4. Build and start the application containers using Docker Compose. You can specify profiles using the --profile argument as follows:
+   - To deploy the full application stack, use:
    ```bash
-   docker-compose up --build
+   docker-compose --profile full-deploy up --build
    ```
-   This command will download the necessary Docker images, build the application, and start the containers.
+   - To run only the FastAPI and MongoDB containers, use:
+   ```bash
+   docker-compose --profile backend-only up --build
+   ```
+   - To run only the MongoDB container, use:
+   ```bash
+   docker-compose --profile mongodb-only up --build
+   ```
+
+This command will download the necessary Docker images, build the application, and start the containers.
 
 ## Accessing the Application
 - Vue App: http://localhost:8080

@@ -8,7 +8,7 @@ from passlib.context import CryptContext
 from starlette import status
 
 from .roles import RolesEnum
-from ..config import ACCESS_TOKEN_EXPIRE_MINUTES, SECRET_KEY, ALGORITHM
+from ..config import ACCESS_TOKEN_EXPIRE_MINUTES, FASTAPI_SECRET_KEY, ALGORITHM
 from ...modules.users.models import UserDocument
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -49,7 +49,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None) -> s
     else:
         expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, FASTAPI_SECRET_KEY, ALGORITHM)
     return encoded_jwt
 
 
@@ -63,7 +63,7 @@ async def get_current_user(
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        payload = jwt.decode(token=token, key=SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token=token, key=FASTAPI_SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
