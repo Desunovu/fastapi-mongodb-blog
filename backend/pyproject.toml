@@ -19,6 +19,9 @@ passlib = "^1.7.4"
 bcrypt = "^4.0.1"
 python-jose = "^3.3.0"
 cryptography = "^41.0.3"
+openai = "^0.28.1"
+pyyaml = "^6.0.1"
+langdetect = "^1.0.9"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.7.0"
