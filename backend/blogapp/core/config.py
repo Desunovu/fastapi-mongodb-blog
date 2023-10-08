@@ -1,8 +1,11 @@
+import logging
 import os
 import time
 from pathlib import Path
 
 from dotenv import load_dotenv
+
+log = logging.getLogger("blogapp")
 
 mode = os.getenv("FASTAPI_APP_MODE", "DEV")
 if mode == "DEV":
@@ -15,13 +18,17 @@ if mode == "DEV":
         ),
         ".env.development",
     )
-    print(f"[DEV MODE] Путь к файлу .env: {env_path}")
+    log.debug(f"[DEV MODE] Путь к файлу .env: {env_path}")
     load_dotenv_result = load_dotenv(dotenv_path=env_path)
 elif mode == "PROD":
-    print(f"[PROD MODE]")
+    log.debug(f"[PROD MODE]")
 
-# Определение констант приложения
+# Получение переменных окружения приложения
 FASTAPI_SECRET_KEY = os.getenv("FASTAPI_SECRET_KEY", "")
+
+FASTAPI_CHATGPT_ALTERNATIVE_BASE = os.getenv("FASTAPI_CHATGPT_ALTERNATIVE_BASE", "")
+FASTAPI_CHATGPT_API_KEY = os.getenv("FASTAPI_CHATGPT_API_KEY", "")
+
 FASTAPI_CREATE_TEST_USERS = os.getenv("FASTAPI_CREATE_TEST_USERS", "DEV")
 FASTAPI_LOGGING_LEVEL = os.getenv("FASTAPI_LOGGING_LEVEL", "DEBUG")
 FASTAPI_MONGODB_URL = os.getenv("FASTAPI_MONGODB_URL", "")

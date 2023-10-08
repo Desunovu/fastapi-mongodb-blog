@@ -42,7 +42,7 @@ To run this project locally, you can use Docker Compose. Make sure you have Dock
 
    ```dotenv
    FASTAPI_SECRET_KEY=mysecretkey
-   FASTAPI_CHATGPT_ENDPOINT=https://api.openai.com
+   FASTAPI_CHATGPT_ALTERNATIVE_BASE=https://api.openai.com
    FASTAPI_CHATGPT_API_KEY=someapikey
    FASTAPI_CREATE_TEST_USERS=true
    FASTAPI_LOGGING_LEVEL=debug

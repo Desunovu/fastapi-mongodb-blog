@@ -3,12 +3,15 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .core.config import FASTAPI_CREATE_TEST_USERS
+from .core.config import FASTAPI_CREATE_TEST_USERS, FASTAPI_CHATGPT_API_KEY, \
+    FASTAPI_CHATGPT_ALTERNATIVE_BASE
 from .core.database.mongodb import init_odm
 from .core.logging import init_loggers
-from .core.security import routes as security_routes
+from .core.security.routes import router as security_router
 from .modules.articles.routes import router as articles_router
 from .modules.comments.routes import router as comments_router
+from .modules.gpt_writer.routes import router as gpt_writer_router
+from .modules.gpt_writer.writer import Writer
 from .modules.users.routes import router as users_router
 from .utils.create_users import create_test_users
 
@@ -40,10 +43,21 @@ async def startup():
         await create_test_users()
         log.info("Проверка тестовых пользователей завершена")
 
+    if FASTAPI_CHATGPT_API_KEY:
+        Writer.init_writer(FASTAPI_CHATGPT_ALTERNATIVE_BASE, FASTAPI_CHATGPT_API_KEY)
+        log.info("Инициализация ChatGPT завершена")
+
     log.info("Выполнены подготовительные задачи при старте FastAPI")
 
 
-app.include_router(security_routes.router)
-app.include_router(articles_router)
-app.include_router(comments_router)
-app.include_router(users_router)
+# Подключить роутеры
+routers = [
+    security_router,
+    articles_router,
+    comments_router,
+    users_router,
+    gpt_writer_router,
+]
+
+for router in routers:
+    app.include_router(router)
