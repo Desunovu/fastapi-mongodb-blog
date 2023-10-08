@@ -31,9 +31,14 @@ class LogConfig(BaseModel):
             "formatter": "default",
             "filename": LOG_FILE_PATH,
         },
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "default",
+            "stream": "ext://sys.stdout",
+        },
     }
     loggers: dict = {
-        LOGGER_NAME: {"handlers": ["file"], "level": FASTAPI_LOGGING_LEVEL},
+        LOGGER_NAME: {"handlers": ["file", "console"], "level": FASTAPI_LOGGING_LEVEL},
     }
 
 
