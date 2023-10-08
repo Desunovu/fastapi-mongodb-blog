@@ -6,7 +6,7 @@ from fastapi import HTTPException
 from openai.openai_object import OpenAIObject
 import yaml
 
-from core.config import BACKEND_DIR_PATH
+from ...core.config import BACKEND_DIR_PATH
 
 log = logging.getLogger("blogapp")
 
