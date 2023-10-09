@@ -21,10 +21,12 @@ const props = defineProps<{ currentUser?: UserDocument }>()
       <q-btn to="/register" stretch flat label="Зарегестрироваться" />
     </div>
     <div v-else>
-      <!-- Блок который показывается если пользователь администратор -->
-      <div v-if="currentUser.role == 'Admin'">
+      <!-- Блок который показывается если пользователь администратор или автор -->
+      <div v-if="currentUser.role == 'Admin' || currentUser.role == 'Author'">
         <q-btn to="/create-article" label="Написать статью" flat class="text-info" />
       </div>
+      <!-- Блок который показывается если пользователь администратор -->
+      <div v-if="currentUser.role == 'Admin'"></div>
       <q-btn to="/" stretch flat label="Все статьи" />
       <q-btn to="/profile" stretch flat>{{ currentUser.username }}</q-btn>
       <q-btn to="/logout" stretch flat label="Выйти" />
