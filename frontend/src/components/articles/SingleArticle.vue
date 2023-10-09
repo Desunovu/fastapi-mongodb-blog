@@ -42,9 +42,7 @@ onMounted(() => {
         {{ article?.title }}
       </q-item-label>
 
-      <q-item-label class="text-body1 text-white">
-        {{ article?.content }}
-      </q-item-label>
+      <q-item-label class="text-body1 text-white" v-html="article.content!.replace(/\n/g, '<br>')" />
     </q-item-section>
   </q-item>
 </template>

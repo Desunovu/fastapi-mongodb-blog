@@ -9,6 +9,7 @@ export type { OpenAPIConfig } from './core/OpenAPI';
 
 export type { ArticleCreateOrUpdate } from './models/ArticleCreateOrUpdate';
 export type { ArticleDocument } from './models/ArticleDocument';
+export type { ArticleGenerate } from './models/ArticleGenerate';
 export type { ArticleResponse } from './models/ArticleResponse';
 export type { ArticlesResponse } from './models/ArticlesResponse';
 export { ArticlesSortField } from './models/ArticlesSortField';
@@ -20,6 +21,7 @@ export type { CommentResponse } from './models/CommentResponse';
 export type { CommentsResponse } from './models/CommentsResponse';
 export type { CommentsSortField } from './models/CommentsSortField';
 export type { CommentUpdate } from './models/CommentUpdate';
+export type { GeneratedArticleResponse } from './models/GeneratedArticleResponse';
 export type { HTTPValidationError } from './models/HTTPValidationError';
 export type { RegisterRequestBody } from './models/RegisterRequestBody';
 export type { ReplyCreate } from './models/ReplyCreate';
