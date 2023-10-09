@@ -37,6 +37,6 @@ const userStore = useUserStore()
 /* Ограниение по ширине для всего контента сайта в процентах */
 .content-width {
   min-width: 70%;
-  max-width: 100%;
+  max-width: 70%;
 }
 </style>

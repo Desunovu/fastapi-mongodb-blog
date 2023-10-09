@@ -7,6 +7,7 @@ from beanie import Link
 from pydantic import BaseModel, model_validator, Field
 
 from ..users.models import UserDocument
+from ...core.config import ARTICLE_MAX_LENGTH
 from ...utils.extended_document import ExtendedDocument
 
 
@@ -30,7 +31,7 @@ class ArticleDocument(ExtendedDocument):
 
 class ArticleCreateOrUpdate(BaseModel):
     title: Annotated[str, Field(min_length=2, max_length=120)] | None = None
-    content: Annotated[str, Field(max_length=120)] | None = None
+    content: Annotated[str, Field(max_length=ARTICLE_MAX_LENGTH)] | None = None
     tags: Annotated[list[str], Field(max_items=20)] | None = None
 
     @model_validator(mode="after")

@@ -50,3 +50,6 @@ LOG_FILE_PATH: Path = LOGS_DIR_PATH / f"""{time.strftime("%Y%m%d-%H%M%S")}.log""
 # Аватары пользователей
 DEFAULT_AVATAR_URL: str = "https://cdn-icons-png.flaticon.com/512/149/149071.png"
 AVATAR_PROVIDER_URL: str = "https://cdn-icons-png.flaticon.com"
+
+# Параметры статей
+ARTICLE_MAX_LENGTH: int = 10000

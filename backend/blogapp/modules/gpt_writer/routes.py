@@ -5,6 +5,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
 from openai.openai_object import OpenAIObject
+from starlette import status
 
 from .models import ArticleGenerate, GeneratedArticleResponse
 from .writer import Writer
@@ -30,7 +31,7 @@ async def generate_article(
 
     if not (FASTAPI_CHATGPT_ALTERNATIVE_BASE and FASTAPI_CHATGPT_API_KEY):
         raise HTTPException(
-            status_code=400, detail="Missing required environment variables"
+            status_code=status.HTTP_501_NOT_IMPLEMENTED, detail="Missing required environment variables"
         )
 
     # Подготовка промта
