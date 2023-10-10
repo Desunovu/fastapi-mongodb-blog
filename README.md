@@ -10,16 +10,17 @@ This project is an educational project for developing a blog using Fast API, Vue
 - **Backend Web Framework**: [FastAPI](https://fastapi.tiangolo.com/)
 - **Database**: MongoDB (used with  [Beanie ODM](https://beanie-odm.dev/))
 - **Frontend Web Framework**: Vue.js (with [Quasar](https://quasar.dev/), [Pinia](https://pinia.vuejs.org/), [OpenAPI Typescript Codegen](https://github.com/ferdikoomen/openapi-typescript-codegen))
-- **Honorable mention**:  OAuth 2.0 JWT Bearer Flow, Nginx
+- **Honorable mention**:  OAuth 2.0 JWT Bearer Flow, Nginx, Chat completions API
 
 ## Project Functionality
 1. **Registration and Authentication**: Users can register and authenticate using OAuth 2.0 JWT.
 2. **Profile Management**: Users can manage their profiles, including changing passwords and updating information. Administrators can also manage users.
-3. **Blog Management**: Users can create, edit, and delete blog articles.
+3. **Blog Management**: Authors can create, edit, and delete blog articles.
 4. **Viewing Articles**: Articles can be viewed as a list and in detail. Pagination and sorting are supported for displaying a large number of articles.
 5. **Tags and Filters**: Articles can be filtered by tags, and users can add tags to articles.
 6. **Search**: Search for articles using keywords.
 7. **Comments**: Users can add comments and reply to them.
+8. **Article Generation**: Admins can generate articles using the OpenAI chat completion API.
 
 
 ## Installation and Local Setup
@@ -42,7 +43,7 @@ To run this project locally, you can use Docker Compose. Make sure you have Dock
 
    ```dotenv
    FASTAPI_SECRET_KEY=mysecretkey
-   FASTAPI_CHATGPT_ALTERNATIVE_BASE=https://api.openai.com
+   FASTAPI_CHATGPT_ALTERNATIVE_BASE=https://neuroapi.host/v1
    FASTAPI_CHATGPT_API_KEY=someapikey
    FASTAPI_CREATE_TEST_USERS=true
    FASTAPI_LOGGING_LEVEL=debug
