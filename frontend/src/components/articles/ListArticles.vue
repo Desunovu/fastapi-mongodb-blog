@@ -24,7 +24,11 @@ const props = defineProps({
             >{{ article.title }}</router-link
           >
         </q-item-label>
-        <q-item-label lines="5" class="text-body1 text-white">{{ article.content }}</q-item-label>
+        <q-item-label
+          lines="5"
+          class="text-body1 text-white"
+          v-html="article.content!.replace(/\n/g, '<br>')"
+        />
         <q-btn :to="'/article/' + article._id" flat class="float-right">
           <q-item-label caption class="text-white">Открыть статью полностью >>></q-item-label>
         </q-btn>
