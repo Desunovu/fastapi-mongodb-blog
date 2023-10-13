@@ -10,6 +10,8 @@ const searchText = ref('')
 const freezedSearchText = ref('')
 const limit = ref<number>(10)
 const skip = ref<number>(0)
+const page = ref<number>(1)
+const maxPage = ref<number>(10) // TODO получать из ответа сервера
 
 const loadMoreArticles = async () => {
   const articlesResponse = await DefaultService.listArticlesArticlesGet(
@@ -36,8 +38,14 @@ const handleSearchbarClear = () => {
   loadMoreArticles()
 }
 
+const handlePageChange = async () => {
+  skip.value = (page.value - 1) * limit.value
+  await loadMoreArticles()
+  window.scrollTo(0, 0)
+}
+
 onBeforeMount(async () => {
-  loadMoreArticles()
+  await loadMoreArticles()
 })
 </script>
 
@@ -89,6 +97,15 @@ onBeforeMount(async () => {
         </q-item-section>
       </q-item>
     </q-list>
+
+    <!-- Пагинация -->
+    <q-pagination
+      v-model="page"
+      @update:model-value="handlePageChange"
+      input
+      :max="maxPage"
+      class="q-my-lg"
+    />
   </div>
 </template>
 
