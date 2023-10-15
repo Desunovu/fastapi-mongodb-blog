@@ -12,7 +12,7 @@ const handleSubmit = async () => {
   loading.value = true
   const gptGeneratorResponse = await DefaultService.generateArticleGptWriterPost({
     title: title.value,
-    tags: tagsString.value.split(','),
+    tags: [...tagsString.value.split(','), 'ChatGPT generated'],
     key_phrases: keyPhrasesString.value.split(',').map((phrase) => phrase.trim())
   }).finally(() => {
     loading.value = false

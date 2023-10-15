@@ -21,20 +21,26 @@ const titleRef = ref<string>(
 const conentRef = ref<string>(
   props.articleToEdit?.content ? props.articleToEdit.content : 'Текст статьи'
 )
+const tagsRef = ref<string[]>(
+  props.articleToEdit?.tags ? props.articleToEdit.tags : ['Тег1', 'Тег2']
+)
+const newTag = ref<string>('')
+
 const articleDeleteDialog = ref<boolean>(false)
 
 async function handleArticleSave() {
   if (props.createMode) {
     const createArticleResponse = await DefaultService.createArticleArticlesPost({
       title: titleRef.value,
-      content: conentRef.value
+      content: conentRef.value,
+      tags: tagsRef.value
     })
     Notify.create('Создана новая статья, перенаправляем')
     router.push('/article/' + createArticleResponse.article._id)
   } else if (props.editMode) {
     const updateArticleResponse = await DefaultService.updateArticleArticlesArticleIdPut(
       props.articleToEdit?._id ?? '',
-      { title: titleRef.value, content: conentRef.value }
+      { title: titleRef.value, content: conentRef.value, tags: tagsRef.value }
     )
     Notify.create('Cтатья успешно обновлена, перенаправляем')
     router.push('/article/' + updateArticleResponse.article._id)
@@ -45,6 +51,13 @@ async function handleArticleDelete() {
   await DefaultService.deleteArticleArticlesArticleIdDelete(props.articleToEdit?._id!)
   Notify.create('Статья удалена')
   router.push('/')
+}
+
+function handleAddTag() {
+  if (newTag.value) {
+    tagsRef.value.push(newTag.value)
+    newTag.value = ''
+  }
 }
 </script>
 
@@ -58,6 +71,27 @@ async function handleArticleDelete() {
         class="q-ma-md"
       />
       <q-editor v-model="conentRef" min-height="5rem" />
+
+      <!-- Теги -->
+      <div class="row items-center">
+        <q-chip
+          v-for="tag in tagsRef"
+          :label="tag"
+          :key="tag"
+          removable
+          @remove="tagsRef.splice(tagsRef.indexOf(tag), 1)"
+          size="sm"
+          dark
+          color="primary"
+        />
+        <!-- Добавить тег -->
+        <div class="row">
+          <q-input v-model="newTag" class="col q-pl-lg" dense />
+          <q-btn label="Добавить тег" @click="handleAddTag" flat size="sm"> </q-btn>
+        </div>
+      </div>
+
+      <!-- Кнопки -->
       <q-card-actions class="row justify-between">
         <q-btn label="Сохранить статью" class="q-ma-md self-stretch" @click="handleArticleSave" />
         <!-- Красная кнопка удалить вызывающая диалог удаления -->

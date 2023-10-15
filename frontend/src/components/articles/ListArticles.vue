@@ -91,6 +91,20 @@ onBeforeMount(async () => {
             class="text-body1 text-white"
             v-html="article.content!.replace(/\n/g, '<br>')"
           />
+
+          <!-- Теги -->
+          <div v-if="article?.tags">
+            <q-chip
+              v-for="tag in article?.tags"
+              :label="tag"
+              :key="tag"
+              size="sm"
+              dark
+              color="primary"
+            />
+          </div>
+
+          <!-- Открытие статьи -->
           <q-btn :to="'/article/' + article._id" flat class="float-right">
             <q-item-label caption class="text-white">Открыть статью полностью >>></q-item-label>
           </q-btn>

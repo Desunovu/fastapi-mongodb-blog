@@ -3,7 +3,7 @@ import { type ArticleDocument } from '@/client'
 import UserItemSection from '@/components/users/UserItemSection.vue'
 import { useUserStore } from '@/stores/UserStore'
 import moment from 'moment'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onBeforeMount, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const props = defineProps<{
@@ -19,7 +19,7 @@ const editLink = computed(() => {
   return route.path + '/edit'
 })
 
-onMounted(() => {
+onBeforeMount(async () => {
   const currentUser = useUserStore().user
   if (currentUser?.role == 'Admin' || props.article?.author?.id == currentUser?._id) {
     isAllowedToEdit.value = true
@@ -32,17 +32,42 @@ onMounted(() => {
     <UserItemSection :user="article?.author" />
 
     <q-item-section class="col column items-start">
-      <q-item-label caption class="text-body self-end">
-        {{ formattedDate }}
-      </q-item-label>
+      <!-- Header статьи -->
+      <div class="row justify-between items-center full-width">
+        <q-btn
+          v-if="isAllowedToEdit"
+          label="Редактировать"
+          :to="editLink"
+          class="col-shrink text-body"
+        />
+        <div class="col column items-end full-width">
+          <q-item-label caption class="text-body flex-shrink">
+            {{ formattedDate }}
+          </q-item-label>
 
-      <q-btn v-if="isAllowedToEdit" label="Редактировать" :to="editLink" class="text-body self-end" />
+          <div v-if="article?.tags">
+            <q-chip
+              v-for="tag in article?.tags"
+              :label="tag"
+              :key="tag"
+              size="sm"
+              dark
+              color="primary"
+            />
+          </div>
+        </div>
+      </div>
 
+      <!-- Title статьи -->
       <q-item-label header lines="1" class="text-h5 self-center">
         {{ article?.title }}
       </q-item-label>
 
-      <q-item-label class="text-body1 text-white" v-html="article.content!.replace(/\n/g, '<br>')" />
+      <!-- Текст статьи -->
+      <q-item-label
+        class="text-body1 text-white"
+        v-html="article.content!.replace(/\n/g, '<br>')"
+      />
     </q-item-section>
   </q-item>
 </template>
