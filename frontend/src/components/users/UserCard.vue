@@ -96,8 +96,11 @@ async function handleRoleUpdate() {
     <UserItemSection :user="user" class="col" />
 
     <q-item-section class="col-grow items-start" style="overflow: auto">
-      <q-item-label lines="1" class="text-h5 text-white">
-        {{ user?.email }}
+      <q-item-label lines="1" class="row text-h5 text-white">
+        <div class="q-mr-md">
+          {{ user?.email }}
+        </div>
+        <div v-if="!user?.role" class="text-negative">(Не подтверждена)</div>
       </q-item-label>
       <q-item-label class="text-caption text-white">
         ***Раздел для прочей информации о пользователе***
