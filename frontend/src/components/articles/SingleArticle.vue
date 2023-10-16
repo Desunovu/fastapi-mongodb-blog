@@ -46,14 +46,13 @@ onBeforeMount(async () => {
           </q-item-label>
 
           <div v-if="article?.tags">
-            <q-chip
+            <router-link
               v-for="tag in article?.tags"
-              :label="tag"
               :key="tag"
-              size="sm"
-              dark
-              color="primary"
-            />
+              :to="{ name: 'home', query: { tag: tag } }"
+            >
+              <q-chip :label="tag" size="sm" dark color="primary" />
+            </router-link>
           </div>
         </div>
       </div>

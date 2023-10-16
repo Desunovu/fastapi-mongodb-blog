@@ -10,7 +10,7 @@ const props = defineProps<{ currentUser?: UserDocument }>()
       <q-avatar>
         <img src="https://img.icons8.com/3d-fluency/94/disguised-face-1.png" />
       </q-avatar>
-      <q-btn to="/" stretch flat>fastapi-mongodb-vue-blog</q-btn>
+      <q-btn :to="{ name: 'home' }" stretch flat>fastapi-mongodb-vue-blog</q-btn>
       <router-link to="/about" custom>by Desunovu</router-link>
     </q-toolbar-title>
 
