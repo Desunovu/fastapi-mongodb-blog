@@ -23,9 +23,6 @@ router = APIRouter(prefix="/articles")
 
 @router.get("/", response_model=ArticlesResponse)
 async def list_articles(
-    _current_user: Annotated[
-        UserDocument, Depends(RoleChecker(allowed_role=RolesEnum.READER.value))
-    ],
     skip: Annotated[int | None, Query(ge=0)] = None,  # >= 0
     limit: Annotated[int | None, Query(ge=1)] = None,  # >= 1
     sort_by: Annotated[ArticlesSortField, Query()] = ArticlesSortField.created_at.value,
@@ -76,9 +73,6 @@ async def create_article(
 @router.get("/{article_id}", response_model=ArticleResponse)
 async def read_article(
     article_id: PydanticObjectId,
-    current_user: Annotated[
-        UserDocument, Depends(RoleChecker(allowed_role=RolesEnum.READER.value))
-    ],
 ):
     """Возвращает статью по ее uuid."""
 

@@ -25,9 +25,6 @@ router = APIRouter(prefix="/comments")
 
 @router.get("/", response_model=CommentsResponse)
 async def list_comments(
-    _current_user: Annotated[
-        UserDocument, Depends(RoleChecker(allowed_role=RolesEnum.READER.value))
-    ],
     article_id: PydanticObjectId,
     skip: Annotated[int | None, Query(ge=0)] = None,  # >= 0
     limit: Annotated[int | None, Query(ge=1)] = None,  # >= 1
