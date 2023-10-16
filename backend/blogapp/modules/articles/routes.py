@@ -41,7 +41,7 @@ async def list_articles(
         query = query.find(Text(search_query), fetch_links=True)
     # Поиск по тегу
     if tag:
-        query = query.find(All(ArticleDocument.tags, [tag]))
+        query = query.find(All(ArticleDocument.tags, [tag]), fetch_links=True)
     # Сортировка, пагинация
     query = query.sort((sort_by, sort_order)).skip(n=skip).limit(n=limit)
     # Получение списка статей
