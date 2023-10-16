@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { DefaultService, type UserDocument } from '@/client'
+import { DefaultService, RolesEnum, type UserDocument } from '@/client'
 import AuthService from '@/services/AuthService'
 import { Notify } from 'quasar'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import UserItemSection from './UserItemSection.vue'
+import { useUserStore } from '@/stores/UserStore'
 
 export interface Props {
   user?: UserDocument | null
@@ -16,6 +17,8 @@ const props = withDefaults(defineProps<Props>(), {
   editable: () => false
 })
 
+const currentUser = useUserStore().user
+
 const showEmailDialog = ref(false)
 const showPasswordDialog = ref(false)
 const showAvatarDialog = ref(false)
@@ -23,6 +26,11 @@ const newEmail = ref<string>()
 const newPassword = ref<string>('')
 const oldPassword = ref<string>('')
 const avatarsToChoose = ref<string[]>([])
+const newRole = ref<RolesEnum>()
+
+const isAllowedToChangeUserRole = computed(() => {
+  return props.user?.role != 'Admin' && currentUser?.role == 'Admin'
+})
 
 async function loadAvatarsToChoose() {
   const avatarsResponse = {
@@ -73,11 +81,20 @@ async function handlePasswordUpdate() {
   })
   Notify.create('Установлен новый пароль!')
 }
+
+async function handleRoleUpdate() {
+  await DefaultService.changeUserRoleUsersUserIdRolePut(props.user?._id ?? '', {
+    role: newRole.value
+  })
+
+  Notify.create('Установлена роль: ' + newRole.value)
+}
 </script>
 
 <template>
-  <q-item class="row justify-start items-start q-pt-lg bg-secondary">
+  <q-item v-if="user" class="row justify-start items-start q-pt-lg bg-secondary">
     <UserItemSection :user="user" class="col" />
+
     <q-item-section class="col-grow items-start" style="overflow: auto">
       <q-item-label lines="1" class="text-h5 text-white">
         {{ user?.email }}
@@ -86,7 +103,9 @@ async function handlePasswordUpdate() {
         ***Раздел для прочей информации о пользователе***
       </q-item-label>
     </q-item-section>
-    <q-item-section class="col-4" style="overflow: auto">
+
+    <!-- Блок с кнопками для изменения данных -->
+    <q-item-actions class="column col-shrink">
       <q-btn
         v-if="editable"
         label="Изменить E-mail"
@@ -103,7 +122,6 @@ async function handlePasswordUpdate() {
         align="left"
         flat
       />
-
       <q-btn
         v-if="editable"
         label="Изменить аватар"
@@ -112,7 +130,15 @@ async function handlePasswordUpdate() {
         align="left"
         flat
       />
-    </q-item-section>
+      <q-select
+        v-if="isAllowedToChangeUserRole"
+        v-model="newRole"
+        :options="Object.values(RolesEnum)"
+        @update:model-value="handleRoleUpdate"
+        label="Установить роль"
+        class="q-mx-md"
+      />
+    </q-item-actions>
 
     <q-dialog v-model="showEmailDialog">
       <q-card class="bg-secondary" style="width: 100%">
