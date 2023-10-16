@@ -38,7 +38,7 @@ async def list_articles(
     query = ArticleDocument.find(fetch_links=True)
     # Поиск по текстовому запросу
     if search_query:
-        query = query.find(Text(search_query))
+        query = query.find(Text(search_query), fetch_links=True)
     # Поиск по тегу
     if tag:
         query = query.find(All(ArticleDocument.tags, [tag]))
