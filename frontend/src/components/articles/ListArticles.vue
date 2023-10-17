@@ -15,6 +15,7 @@ const limit = ref<number>(10)
 const skip = ref<number>(0)
 const page = ref<number>(1)
 const maxPage = ref<number>(10) // TODO получать из ответа сервера
+const total = ref<number>(0)
 const searchByTags = ref<boolean>(false)
 
 const loadMoreArticles = async () => {
@@ -29,6 +30,8 @@ const loadMoreArticles = async () => {
     !searchByTags.value ? searchInput : undefined // searchQuery
   )
   articles.value = articlesResponse.articles
+  total.value = articlesResponse.total
+  maxPage.value = Math.ceil(total.value / limit.value)
 }
 
 const handleSearchbarSubmit = async () => {
@@ -103,7 +106,7 @@ onBeforeRouteUpdate(async (to, from) => {
     <!-- Информация о поиске-->
     <div v-if="freezedSearchText.length > 0" class="row self-sta text-info q-mr-md q-mb-lg">
       <div class="q-mr-md">Поисковый запрос: {{ freezedSearchText }}</div>
-      <div>Найдено статей: {{ articles.length ?? 0 }}</div>
+      <div>Найдено статей: {{ total }}</div>
     </div>
 
     <!-- Список статей -->
