@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 from typing import Annotated
 
@@ -19,6 +20,7 @@ from ...core.security.roles import RolesEnum
 from ...core.security.utilities import RoleChecker
 
 router = APIRouter(prefix="/articles")
+log = logging.getLogger("blogapp")
 
 
 @router.get("/", response_model=ArticlesResponse)
@@ -42,12 +44,19 @@ async def list_articles(
     # Поиск по тегу
     if tag:
         query = query.find(All(ArticleDocument.tags, [tag]), fetch_links=True)
+    # Получение количества найденных документов
+    # TODO Убрать костыль при исправлении Beanie (баг .count() после Text search v1.23)
+    try:
+        total = await query.count()
+    except Exception as e:
+        log.error(str(e))
+        total = (await query.to_list()).__len__()
     # Сортировка, пагинация
     query = query.sort((sort_by, sort_order)).skip(n=skip).limit(n=limit)
     # Получение списка статей
     articles = await query.to_list(length=None)
 
-    return {"articles": articles}
+    return {"articles": articles, "total": total}
 
 
 @router.post("/", response_model=ArticleResponse)

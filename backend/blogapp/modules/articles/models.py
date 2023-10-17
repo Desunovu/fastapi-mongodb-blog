@@ -59,6 +59,7 @@ class ArticleResponse(BaseModel):
 
 class ArticlesResponse(BaseModel):
     articles: list[ArticleDocument]
+    total: int
 
 
 class ArticlesSortField(str, Enum):
