@@ -28,23 +28,24 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <q-item class="row items-start bg-secondary q-pt-lg">
-    <UserItemSection :user="article?.author" />
-
-    <q-item-section class="col column items-start">
-      <!-- Header статьи -->
+  <div class="row bg-secondary q-pa-md">
+    <!-- Блок статьи -->
+    <div class="col column shadow-2 q-pa-md">
+      <!-- Header -->
       <div class="row justify-between items-center full-width">
-        <q-btn
-          v-if="isAllowedToEdit"
-          label="Редактировать"
-          :to="editLink"
-          class="col-shrink text-body"
-        />
+        <!-- Аватар и имя автора -->
+        <router-link
+          :to="{ name: 'user', params: { id: article?.author?.id } }"
+          class="row items-end text-h5 text-uppercase text-weight-bold text-white"
+        >
+          <UserItemSection :user="article?.author" small class="q-mr-md" />
+          {{ article?.author?.username }}
+        </router-link>
+        <!-- Дата и теги -->
         <div class="col column items-end full-width">
-          <q-item-label caption class="text-body flex-shrink">
+          <div caption class="text-body flex-shrink">
             {{ formattedDate }}
-          </q-item-label>
-
+          </div>
           <div v-if="article?.tags">
             <router-link
               v-for="tag in article?.tags"
@@ -58,7 +59,11 @@ onBeforeMount(async () => {
       </div>
 
       <!-- Title статьи -->
-      <q-item-label header lines="1" class="text-h5 self-center">
+      <q-item-label
+        header
+        lines="1"
+        class="text-h5 text-white text-weight-bold text-center q-mb-md"
+      >
         {{ article?.title }}
       </q-item-label>
 
@@ -67,6 +72,14 @@ onBeforeMount(async () => {
         class="text-body1 text-white"
         v-html="article.content!.replace(/\n/g, '<br>')"
       />
-    </q-item-section>
-  </q-item>
+
+      <!-- Кнопка "Редактировать статью" -->
+      <q-btn
+        v-if="isAllowedToEdit"
+        label="Редактировать"
+        :to="editLink"
+        class="self-end text-body q-ma-md"
+      />
+    </div>
+  </div>
 </template>

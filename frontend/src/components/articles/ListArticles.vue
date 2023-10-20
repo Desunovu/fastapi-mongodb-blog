@@ -5,6 +5,7 @@ import { ref } from 'vue'
 import { onBeforeMount } from 'vue'
 import { DefaultService } from '@/client'
 import { onBeforeRouteUpdate, useRoute } from 'vue-router'
+import moment from 'moment'
 
 const route = useRoute()
 
@@ -14,11 +15,12 @@ const freezedSearchText = ref('')
 const limit = ref<number>(10)
 const skip = ref<number>(0)
 const page = ref<number>(1)
-const maxPage = ref<number>(10) // TODO получать из ответа сервера
+const maxPage = ref<number>(10)
 const total = ref<number>(0)
 const searchByTags = ref<boolean>(false)
 
 const loadMoreArticles = async () => {
+  console.debug('Загрузка статей', skip.value, limit.value)
   const searchInput = freezedSearchText.value.length > 0 ? freezedSearchText.value : undefined
 
   const articlesResponse = await DefaultService.listArticlesArticlesGet(
@@ -35,6 +37,7 @@ const loadMoreArticles = async () => {
 }
 
 const handleSearchbarSubmit = async () => {
+  console.debug('Отправка строки поиска', searchText.value)
   articles.value = []
   skip.value = 0
   freezedSearchText.value = searchText.value
@@ -42,12 +45,18 @@ const handleSearchbarSubmit = async () => {
 }
 
 const handleSearchbarClear = () => {
+  console.debug('Сброс поиска')
   searchText.value = ''
   freezedSearchText.value = ''
   loadMoreArticles()
 }
 
 const handlePageChange = async () => {
+  if (!page.value) {
+    page.value = 1
+    return
+  }
+  console.debug('Смена страницы на ', page.value)
   skip.value = (page.value - 1) * limit.value
   await loadMoreArticles()
   window.scrollTo(0, 0)
@@ -55,10 +64,12 @@ const handlePageChange = async () => {
 
 onBeforeMount(async () => {
   if (route.query.tag) {
+    console.debug('Монтируется компонент с тегом', route.query.tag)
     searchByTags.value = true
     searchText.value = route.query.tag as string
     await handleSearchbarSubmit()
   } else {
+    console.debug('Монтируется компонент без тега')
     await loadMoreArticles()
   }
 })
@@ -69,11 +80,13 @@ onBeforeRouteUpdate(async (to, from) => {
   skip.value = 0
 
   if (to.query.tag) {
+    console.debug('Обновлен компонент с тегом', to.query.tag)
     searchByTags.value = true
     searchText.value = to.query.tag as string
     freezedSearchText.value = searchText.value
     await handleSearchbarSubmit()
   } else {
+    console.debug('Обновлен компонент без тега')
     searchByTags.value = false
     searchText.value = ''
     freezedSearchText.value = ''
@@ -83,72 +96,88 @@ onBeforeRouteUpdate(async (to, from) => {
 </script>
 
 <template>
-  <div class="column items-center bg-secondary">
-    <!-- Поисковая строка -->
-    <q-input
-      v-model="searchText"
-      @keyup.enter="handleSearchbarSubmit"
-      placeholder="Поиск"
-      class="bg-secondary search-input q-py-md q-px-sm"
-    >
-      <template v-slot:append>
-        <q-icon name="search" @click="handleSearchbarSubmit" class="cursor-pointer" />
-        <q-icon name="close" @click="handleSearchbarClear" class="cursor-pointer" />
-      </template>
-      <!-- Чекбокс "искать по тегам" -->
-      <q-checkbox
-        v-model="searchByTags"
-        label="Искать по тегам"
-        class="q-mr-sm"
-        @update:model-value="handleSearchbarSubmit"
-      />
-    </q-input>
-    <!-- Информация о поиске-->
-    <div v-if="freezedSearchText.length > 0" class="row self-sta text-info q-mr-md q-mb-lg">
-      <div class="q-mr-md">Поисковый запрос: {{ freezedSearchText }}</div>
-      <div>Найдено статей: {{ total }}</div>
+  <div class="column bg-secondary q-pa-md">
+    <!-- Header -->
+    <div class="row justify-end">
+      <div class="col-10">
+        <!-- Поисковая строка -->
+        <q-input
+          v-model="searchText"
+          @keyup.enter="handleSearchbarSubmit"
+          placeholder="Поиск"
+          class="col-9 bg-secondary self-end"
+        >
+          <template v-slot:append>
+            <q-icon name="search" @click="handleSearchbarSubmit" class="cursor-pointer" />
+            <q-icon name="close" @click="handleSearchbarClear" class="cursor-pointer" />
+          </template>
+          <!-- Чекбокс "искать по тегам" -->
+          <q-checkbox
+            v-model="searchByTags"
+            label="Искать по тегам"
+            class="q-mr-sm"
+            @update:model-value="handleSearchbarSubmit"
+          />
+        </q-input>
+        <!-- Информация о поиске-->
+        <div v-if="freezedSearchText.length > 0" class="row self-sta text-info q-mr-md q-mb-lg">
+          <div class="q-mr-md">Поисковый запрос: {{ freezedSearchText }}</div>
+          <div>Найдено статей: {{ total }}</div>
+        </div>
+      </div>
     </div>
 
     <!-- Список статей -->
-    <q-list separator>
-      <q-item
-        v-for="article in articles"
-        :key="article._id ?? ''"
-        class="row items-start bg-secondary"
-      >
-        <UserItemSection :user="article.author" />
+    <q-list separator class="q-mt-md">
+      <!-- Статья -->
+      <div v-for="article in articles" :key="article._id ?? ''" class="row q-mb-lg">
+        <!-- Аватар и имя автора -->
+        <div class="col-auto q-mx-md">
+          <UserItemSection :user="article.author" class="self-center" />
+        </div>
 
-        <q-item-section class="col column items-start">
-          <q-item-label header lines="1" class="text-h5">
+        <!-- Тело статьи -->
+        <div class="col shadow-4 q-pa-sm">
+          <!-- Теги и дата -->
+          <div class="column items-end full-width">
+            <q-item-label caption class="text-body flex-shrink">
+              {{ moment(article?.created_at).format('Do MMMM YYYY') }}
+            </q-item-label>
+            <div v-if="article?.tags">
+              <router-link
+                v-for="tag in article?.tags"
+                :key="tag"
+                :to="{ name: 'home', query: { tag: tag } }"
+              >
+                <q-chip :label="tag" size="sm" dark color="primary" />
+              </router-link>
+            </div>
+          </div>
+          <!-- Title статьи -->
+          <q-item-label
+            header
+            lines="1"
+            class="text-h5 text-white text-weight-bold text-center q-mb-md"
+          >
             <router-link
               style="text-decoration: none; color: inherit"
               :to="'/article/' + article._id"
-              >{{ article.title }}</router-link
             >
+              {{ article.title }}
+            </router-link>
           </q-item-label>
+          <!-- Контент статьи -->
           <q-item-label
             lines="5"
             class="text-body1 text-white"
             v-html="article.content!.replace(/\n/g, '<br>')"
           />
-
-          <!-- Теги -->
-          <div v-if="article?.tags">
-            <router-link
-              v-for="tag in article?.tags"
-              :key="tag"
-              :to="{ name: 'home', query: { tag: tag } }"
-            >
-              <q-chip :label="tag" size="sm" dark color="primary" />
-            </router-link>
-          </div>
-
-          <!-- Открытие статьи -->
+          <!-- Кнопка "Открыть статью полностью -->
           <q-btn :to="'/article/' + article._id" flat class="float-right">
             <q-item-label caption class="text-white">Открыть статью полностью >>></q-item-label>
           </q-btn>
-        </q-item-section>
-      </q-item>
+        </div>
+      </div>
     </q-list>
 
     <!-- Пагинация -->
@@ -157,7 +186,7 @@ onBeforeRouteUpdate(async (to, from) => {
       @update:model-value="handlePageChange"
       input
       :max="maxPage"
-      class="q-my-lg"
+      class="self-center"
     />
   </div>
 </template>

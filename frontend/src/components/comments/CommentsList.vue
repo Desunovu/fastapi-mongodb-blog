@@ -138,12 +138,19 @@ onBeforeMount(() => {
         class="column"
       >
         <div class="row shadow-5 q-pa-xs">
-          <UserItemSection :user="comment.author" small class="self-start" />
+          <UserItemSection :user="comment.author" small class="self-start q-mr-md" />
           <div class="col items-start">
             <!-- Информация об авторе комментария и времени его создания -->
             <div class="row justify-between items-center">
-              <div class="col-grow text-subtitle1">
-                @{{ 'username' in comment.author ? comment.author.username : '' }}
+              <div class="col-grow row q-gutter-xs text-subtitle1">
+                <router-link
+                  :to="{ name: 'user', params: { id: comment.author.id } }"
+                  class="text-white"
+                >
+                  @{{ 'username' in comment.author ? comment.author.username : '' }}
+                </router-link>
+                <div v-if="comment.author.id == currentUser?._id" class="text-white">(Вы)</div>
+                <div v-if="comment.author.role == 'Admin'" class="text-negative">Админ</div>
               </div>
               <div class="col text-right">
                 {{ comment.updated_at ? '(изменено)' : '' }}
@@ -208,11 +215,20 @@ onBeforeMount(() => {
             :class="{ 'disabled-item': isCommentDisabled(reply.id) }"
             class="row shadow-2 q-my-xs q-pa-sm"
           >
-            <UserItemSection :user="reply.author" small class="self-start" />
+            <UserItemSection :user="reply.author" small class="self-start q-mr-md" />
             <div class="col items-start">
               <!-- Информация об авторе ответа и времени его создания -->
               <div class="row justify-between">
-                <div class="col">@{{ reply.author.username }}</div>
+                <div class="col-grow row q-gutter-xs text-subtitle1">
+                  <router-link
+                    :to="{ name: 'user', params: { id: comment.author.id } }"
+                    class="text-white"
+                  >
+                    @{{ 'username' in comment.author ? comment.author.username : '' }}
+                  </router-link>
+                  <div v-if="comment.author.id == currentUser?._id" class="text-white">(Вы)</div>
+                  <div v-if="comment.author.role == 'Admin'" class="text-negative">Админ</div>
+                </div>
                 <div class="col-stretch text-right">
                   {{ comment.updated_at ? '(изменено)' : '' }}
                   {{ moment(comment.created_at).format('hh:mm DD-MM-YYYY') }}

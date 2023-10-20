@@ -14,18 +14,13 @@ const props = withDefaults(defineProps<Props>(), {
 const avatarSizeStyle = computed(() => {
   return props.small ? '50px' : '100px'
 })
-
-const sectionWidthStyle = computed(() => {
-  return props.small ? '70px' : '20%'
-})
 </script>
 
 <template>
-  <q-item-section
+  <div
     v-if="user"
     avatar
     class="column items-center justify-start"
-    :style="{ 'min-width': sectionWidthStyle, 'max-width': sectionWidthStyle }"
   >
     <q-avatar :size="avatarSizeStyle" rounded>
       <q-img :src="user?.avatar_url!" />
@@ -39,9 +34,9 @@ const sectionWidthStyle = computed(() => {
         {{ user?.username }}
       </q-item-label>
       <q-item-label lines="1" class="text-subtitle2 text-white text-weight-bold q-my-sm">
-        <span v-if="user?.role == 'Author'" class="text-blue">Автор</span>
-        <span v-else-if="user?.role == 'Admin'" class="text-red">Администратор</span>
+        <span v-if="user?.role == 'Author'" class="text-info">Автор</span>
+        <span v-else-if="user?.role == 'Admin'" class="text-negative">Администратор</span>
       </q-item-label></template
     >
-  </q-item-section>
+  </div>
 </template>

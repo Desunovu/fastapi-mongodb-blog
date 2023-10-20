@@ -96,9 +96,9 @@ function handleAddTag() {
         <q-btn label="Сохранить статью" class="q-ma-md self-stretch" @click="handleArticleSave" />
         <!-- Красная кнопка удалить вызывающая диалог удаления -->
         <q-btn
-          :if="editMode"
+          v-if="editMode"
           label="Удалить статью"
-          class="q-ma-md self-stretch bg-negative"
+          class="q-ma-md self-stretch text-white bg-negative"
           @click="articleDeleteDialog = true"
         />
       </q-card-actions>
