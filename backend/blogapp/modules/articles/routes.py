@@ -86,9 +86,7 @@ async def read_article(
     """Возвращает статью по ее uuid."""
 
     # Получение данных
-    article = await ArticleDocument.get_or_404(
-        document_id=article_id, fetch_links=True
-    )
+    article = await ArticleDocument.get_or_404(document_id=article_id, fetch_links=True)
     return {"article": article}
 
 
