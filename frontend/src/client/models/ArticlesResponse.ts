@@ -5,6 +5,9 @@
 
 import type { ArticleDocument } from './ArticleDocument';
 
+/**
+ * Модель ответа с списком статей
+ */
 export type ArticlesResponse = {
     articles: Array<ArticleDocument>;
     total: number;

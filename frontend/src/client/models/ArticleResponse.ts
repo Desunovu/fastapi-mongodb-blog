@@ -5,6 +5,9 @@
 
 import type { ArticleDocument } from './ArticleDocument';
 
+/**
+ * Модель ответа с одной статьей
+ */
 export type ArticleResponse = {
     article: ArticleDocument;
 };
