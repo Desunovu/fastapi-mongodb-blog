@@ -30,6 +30,8 @@ class ArticleDocument(ExtendedDocument):
 
 
 class ArticleCreateOrUpdate(BaseModel):
+    """Модель для создания или обновления статьи. Должно быть хотя бы одно поле не None"""
+
     title: Annotated[str, Field(min_length=2, max_length=120)] | None = None
     content: Annotated[str, Field(max_length=ARTICLE_MAX_LENGTH)] | None = None
     tags: Annotated[list[str], Field(max_items=20)] | None = None
@@ -54,14 +56,20 @@ class ArticleCreateOrUpdate(BaseModel):
 
 
 class ArticleResponse(BaseModel):
+    """Модель ответа с одной статьей"""
+
     article: ArticleDocument
 
 
 class ArticlesResponse(BaseModel):
+    """Модель ответа с списком статей"""
+
     articles: list[ArticleDocument]
     total: int
 
 
 class ArticlesSortField(str, Enum):
+    """Поля по которым проводится сортировка"""
+
     created_at = "created_at"
     title = "title"
