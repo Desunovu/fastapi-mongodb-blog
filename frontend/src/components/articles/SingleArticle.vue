@@ -28,44 +28,44 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <div class="row bg-secondary q-pa-md">
+  <div class="column bg-secondary q-pa-md">
     <!-- Блок статьи -->
-    <div class="col column shadow-2 q-pa-md">
-      <!-- Header -->
-      <div class="row justify-between items-center full-width">
-        <!-- Аватар и имя автора -->
-        <router-link
-          :to="{ name: 'user', params: { id: article?.author?.id } }"
-          class="row items-end text-h5 text-uppercase text-weight-bold text-white"
-        >
-          <UserItemSection :user="article?.author" small class="q-mr-md" />
-          {{ article?.author?.username }}
-        </router-link>
-        <!-- Дата и теги -->
-        <div class="col column items-end full-width">
-          <div caption class="text-body flex-shrink">
-            {{ formattedDate }}
-          </div>
-          <div v-if="article?.tags">
-            <router-link
-              v-for="tag in article?.tags"
-              :key="tag"
-              :to="{ name: 'home', query: { tag: tag } }"
-            >
-              <q-chip :label="tag" size="sm" dark color="primary" />
-            </router-link>
+    <div class="column shadow-2 q-pa-md">
+      <!-- Header с фоном из превью -->
+      <div
+        class="article-header q-pa-sm q-mb-md shadow-2"
+        :style="{ backgroundImage: 'url(' + article?.preview_image_url + ')' }"
+      >
+        <div class="row justify-between items-center q-mb-md">
+          <!-- Аватар и имя автора -->
+          <router-link
+            :to="{ name: 'user', params: { id: article?.author?.id } }"
+            class="row items-end text-h5 text-uppercase text-weight-bold text-white"
+          >
+            <UserItemSection :user="article?.author" small class="q-mr-md" />
+            {{ article?.author?.username }}
+          </router-link>
+          <!-- Дата и теги -->
+          <div class="col column items-end full-width">
+            <div caption class="date-shadow text-body flex-shrink">
+              {{ formattedDate }}
+            </div>
+            <div v-if="article?.tags">
+              <router-link
+                v-for="tag in article?.tags"
+                :key="tag"
+                :to="{ name: 'home', query: { tag: tag } }"
+              >
+                <q-chip :label="tag" size="sm" dark color="primary" />
+              </router-link>
+            </div>
           </div>
         </div>
+        <!-- Заголовок статьи -->
+        <div class="title-style q-mb-lg text-h4 text-white text-weight-bold text-center">
+          {{ article?.title }}
+        </div>
       </div>
-
-      <!-- Title статьи -->
-      <q-item-label
-        header
-        lines="1"
-        class="text-h5 text-white text-weight-bold text-center q-mb-md"
-      >
-        {{ article?.title }}
-      </q-item-label>
 
       <!-- Текст статьи -->
       <q-item-label
@@ -83,3 +83,22 @@ onBeforeMount(async () => {
     </div>
   </div>
 </template>
+
+<style>
+.article-header {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.title-style {
+  /* background: linear-gradient(45deg, #ff0000, #ff7300);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; */
+  text-shadow: 2px 2px 2px #00000044;
+}
+
+.date-shadow {
+  text-shadow: 2px 2px 4px #ffffff;
+}
+</style>

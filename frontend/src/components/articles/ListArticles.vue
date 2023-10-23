@@ -128,7 +128,7 @@ onBeforeRouteUpdate(async (to, from) => {
     </div>
 
     <!-- Список статей -->
-    <q-list separator class="q-mt-md">
+    <q-list separator padding>
       <!-- Статья -->
       <div v-for="article in articles" :key="article._id ?? ''" class="row q-mb-lg">
         <!-- Аватар и имя автора -->
@@ -137,35 +137,74 @@ onBeforeRouteUpdate(async (to, from) => {
         </div>
 
         <!-- Тело статьи -->
-        <div class="col shadow-4 q-pa-sm">
-          <!-- Теги и дата -->
-          <div class="column items-end full-width">
-            <q-item-label caption class="text-body flex-shrink">
-              {{ moment(article?.created_at).format('Do MMMM YYYY') }}
-            </q-item-label>
-            <div v-if="article?.tags">
+        <div class="col column shadow-4 q-pa-sm">
+          <!-- HEADER - NO PREVIEW -->
+          <div v-if="!article.preview_image_url" class="row justify-between q-mb-md full-width">
+            <!-- Заголовок статьи -->
+            <div class="col text-h5 text-white text-weight-bold">
               <router-link
-                v-for="tag in article?.tags"
-                :key="tag"
-                :to="{ name: 'home', query: { tag: tag } }"
+                style="color: inherit; align-self: start"
+                :to="'/article/' + article._id"
               >
-                <q-chip :label="tag" size="sm" dark color="primary" />
+                {{ article.title }}
               </router-link>
             </div>
+            <!-- Дата и теги -->
+            <div class="col column items-end full-width ">
+              <q-item-label caption class="text-body flex-shrink">
+                {{ moment(article?.created_at).format('Do MMMM YYYY') }}
+              </q-item-label>
+              <div v-if="article?.tags">
+                <router-link
+                  v-for="tag in article?.tags"
+                  :key="tag"
+                  :to="{ name: 'home', query: { tag: tag } }"
+                >
+                  <q-chip :label="tag" size="sm" dark color="primary" />
+                </router-link>
+              </div>
+            </div>
           </div>
-          <!-- Title статьи -->
-          <q-item-label
-            header
-            lines="1"
-            class="text-h5 text-white text-weight-bold text-center q-mb-md"
-          >
-            <router-link
-              style="text-decoration: none; color: inherit"
-              :to="'/article/' + article._id"
-            >
-              {{ article.title }}
-            </router-link>
-          </q-item-label>
+
+          <!-- Если есть превью -->
+          <div v-else class="q-mb-md rounded-borders" style="position: relative">
+            <img
+              v-if="article?.preview_image_url"
+              :src="article.preview_image_url"
+              :alt="article.title ?? ''"
+              class="rounded-borders"
+              style="width: 100%; height: 250px; object-fit: cover"
+            />
+            <!-- Оверлей текст -->
+            <div class="overlay-text column justify-between q-mb-md">
+              <!-- Дата и теги -->
+              <div class="col full-width full-height q-pt-md">
+                <q-item-label caption class="text-body flex-shrink">
+                  {{ moment(article?.created_at).format('Do MMMM YYYY') }}
+                </q-item-label>
+                <div v-if="article?.tags">
+                  <router-link
+                    v-for="tag in article?.tags"
+                    :key="tag"
+                    :to="{ name: 'home', query: { tag: tag } }"
+                  >
+                    <q-chip :label="tag" size="sm" dark color="primary" />
+                  </router-link>
+                </div>
+              </div>
+              <!-- Заголовок статьи -->
+              <div class="col full-width full-height text-h3 text-white text-weight-bold">
+                <router-link
+                  style="color: inherit; align-self: start; text-decoration: none"
+                  :to="'/article/' + article._id"
+                >
+                  {{ article.title }}
+                </router-link>
+              </div>
+              <div class="col full-width full-height"></div>
+            </div>
+          </div>
+
           <!-- Контент статьи -->
           <q-item-label
             lines="5"
@@ -198,5 +237,21 @@ onBeforeRouteUpdate(async (to, from) => {
 
 .search-input {
   width: 80%;
+}
+
+.overlay-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  z-index: 1;
+  text-shadow: 2px 2px 2px #00000044;
 }
 </style>
