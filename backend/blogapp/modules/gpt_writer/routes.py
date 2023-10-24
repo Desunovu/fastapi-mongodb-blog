@@ -31,7 +31,8 @@ async def generate_article(
 
     if not (FASTAPI_CHATGPT_ALTERNATIVE_BASE and FASTAPI_CHATGPT_API_KEY):
         raise HTTPException(
-            status_code=status.HTTP_501_NOT_IMPLEMENTED, detail="Missing required environment variables"
+            status_code=status.HTTP_501_NOT_IMPLEMENTED,
+            detail="Missing required environment variables",
         )
 
     # Подготовка промта
@@ -45,7 +46,14 @@ async def generate_article(
     openai_completion: OpenAIObject = await Writer.generate_article_content(
         prompt=prompt
     )
-    article_text: str = openai_completion["choices"][0]["message"]["content"]
+    try:
+        article_text: str = openai_completion["choices"][0]["message"]["content"]
+    except KeyError:
+        log.error(openai_completion["Error"])
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Не удалось получить текст статьи}",
+        )
     log.debug(f"Текст статьи: {article_text}")
     completion_errors = Writer.check_article(article_text)
     if completion_errors:
