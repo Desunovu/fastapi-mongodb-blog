@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { type ArticleDocument } from '@/client'
-import UserItemSection from '@/components/users/UserItemSection.vue'
+import UserInfoCard from '@/components/UserInfoCard.vue'
 import { useUserStore } from '@/stores/UserStore'
 import moment from 'moment'
 import { computed, onBeforeMount, ref } from 'vue'
@@ -42,7 +42,7 @@ onBeforeMount(async () => {
             :to="{ name: 'user', params: { id: article?.author?.id } }"
             class="row items-end text-h5 text-uppercase text-weight-bold text-white"
           >
-            <UserItemSection :user="article?.author" small class="q-mr-md" />
+            <UserInfoCard :user="article?.author" small class="q-mr-md" />
             {{ article?.author?.username }}
           </router-link>
           <!-- Дата и теги -->

@@ -3,7 +3,7 @@ import { DefaultService, RolesEnum, type UserDocument } from '@/client'
 import AuthService from '@/services/AuthService'
 import { Notify } from 'quasar'
 import { computed, ref } from 'vue'
-import UserItemSection from './UserItemSection.vue'
+import UserInfoCard from '@/components/UserInfoCard.vue'
 import { useUserStore } from '@/stores/UserStore'
 
 export interface Props {
@@ -93,7 +93,7 @@ async function handleRoleUpdate() {
 
 <template>
   <q-item v-if="user" class="row justify-start items-start q-pt-lg bg-secondary">
-    <UserItemSection :user="user" class="col" />
+    <UserInfoCard :user="user" class="col" />
 
     <q-item-section class="col-grow items-start" style="overflow: auto">
       <q-item-label lines="1" class="row text-h5 text-white">

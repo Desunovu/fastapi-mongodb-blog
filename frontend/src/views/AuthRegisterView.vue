@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import RegisterForm from '@/components/RegisterForm.vue'
+import AuthRegisterForm from '@/components/AuthRegisterForm.vue'
 </script>
 
 <template>
   <q-page padding class="column items-center">
-    <RegisterForm />
+    <AuthRegisterForm />
   </q-page>
 </template>

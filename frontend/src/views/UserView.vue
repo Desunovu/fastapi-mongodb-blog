@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DefaultService, type UserDocument } from '@/client'
-import UserCard from '@/components/users/UserCard.vue'
+import UserCard from '@/components/UserCard.vue'
 import AuthService from '@/services/AuthService'
 import { useUserStore } from '@/stores/UserStore'
 import { onMounted, ref } from 'vue'
@@ -23,7 +23,9 @@ onMounted(async () => {
     editable.value = true
   } else {
     const userId = route.params.id.toString()
-    if (userId == current_user?._id) {isProfile.value = true}
+    if (userId == current_user?._id) {
+      isProfile.value = true
+    }
     const userResponse = await DefaultService.getUserByIdUsersUserIdGet(userId)
     user.value = userResponse.user
     // разрешить администратору редактировать страницы

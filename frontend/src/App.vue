@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import NavbarMenu from './components/NavbarMenu.vue'
+import HeaderMenu from './components/HeaderMenu.vue'
 import { useUserStore } from './stores/UserStore'
 
 const userStore = useUserStore()
@@ -9,7 +9,7 @@ const userStore = useUserStore()
 <template>
   <q-layout view="lHh Lpr lFf" class="WAL background-image">
     <q-header reveal elevated>
-      <NavbarMenu :currentUser="userStore.user" />
+      <HeaderMenu :currentUser="userStore.user" />
     </q-header>
 
     <q-page-container class="column items-center">

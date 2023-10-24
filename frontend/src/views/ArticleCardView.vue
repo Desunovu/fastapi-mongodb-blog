@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { DefaultService, type ArticleDocument, type CommentDocument } from '@/client'
-import SingleArticle from '@/components/articles/SingleArticle.vue'
-import CommentsList from '@/components/comments/CommentsList.vue';
-import { onBeforeMount, onMounted, ref } from 'vue'
+import { DefaultService, type ArticleDocument } from '@/client'
+import ArticleCard from '@/components/ArticleCard.vue'
+import CommentList from '@/components/CommentList.vue'
+import { onBeforeMount, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const article = ref<ArticleDocument>()
@@ -23,7 +23,7 @@ onBeforeMount(async () => {
 
 <template>
   <q-page padding>
-    <SingleArticle v-if="article" :article="article" />
-    <CommentsList v-if="article" :articleId="article?._id!"/>
+    <ArticleCard v-if="article" :article="article" />
+    <CommentList v-if="article" :articleId="article?._id!" />
   </q-page>
 </template>

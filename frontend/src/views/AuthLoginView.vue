@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import LoginForm from '@/components/LoginForm.vue'
+import AuthLoginForm from '@/components/AuthLoginForm.vue'
 </script>
 
 <template>
   <q-page padding class="column items-center">
-    <LoginForm />
+    <AuthLoginForm />
   </q-page>
 </template>

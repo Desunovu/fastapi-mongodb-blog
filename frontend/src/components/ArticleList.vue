@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { type ArticleDocument } from '@/client'
-import UserItemSection from '@/components/users/UserItemSection.vue'
+import UserInfoCard from '@/components/UserInfoCard.vue'
 import { ref } from 'vue'
 import { onBeforeMount } from 'vue'
 import { DefaultService } from '@/client'
@@ -133,7 +133,7 @@ onBeforeRouteUpdate(async (to, from) => {
       <div v-for="article in articles" :key="article._id ?? ''" class="row q-mb-lg">
         <!-- Аватар и имя автора -->
         <div class="col-auto q-mx-md">
-          <UserItemSection :user="article.author" class="self-center" />
+          <UserInfoCard :user="article.author" class="self-center" />
         </div>
 
         <!-- Тело статьи -->

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import ListArticles from '@/components/articles/ListArticles.vue'
+import ArticleList from '@/components/ArticleList.vue'
 </script>
 
 <template>
   <q-page padding>
-    <ListArticles />
+    <ArticleList />
   </q-page>
 </template>

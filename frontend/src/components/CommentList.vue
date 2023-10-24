@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DefaultService, type CommentDocument } from '@/client'
-import UserItemSection from '../users/UserItemSection.vue'
+import UserInfoCard from '@/components/UserInfoCard.vue'
 import moment from 'moment'
 import { onBeforeMount, ref } from 'vue'
 import { useUserStore } from '@/stores/UserStore'
@@ -138,7 +138,7 @@ onBeforeMount(() => {
         class="column"
       >
         <div class="row shadow-5 q-pa-xs">
-          <UserItemSection :user="comment.author" small class="self-start q-mr-md" />
+          <UserInfoCard :user="comment.author" small class="self-start q-mr-md" />
           <div class="col items-start">
             <!-- Информация об авторе комментария и времени его создания -->
             <div class="row justify-between items-center">
@@ -215,7 +215,7 @@ onBeforeMount(() => {
             :class="{ 'disabled-item': isCommentDisabled(reply.id) }"
             class="row shadow-2 q-my-xs q-pa-sm"
           >
-            <UserItemSection :user="reply.author" small class="self-start q-mr-md" />
+            <UserInfoCard :user="reply.author" small class="self-start q-mr-md" />
             <div class="col items-start">
               <!-- Информация об авторе ответа и времени его создания -->
               <div class="row justify-between">

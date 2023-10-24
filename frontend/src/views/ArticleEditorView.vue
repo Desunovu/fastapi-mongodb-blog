@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { type ArticleDocument, DefaultService } from '@/client'
-import ArticleEditor from '@/components/articles/ArticleEditor.vue'
+import ArticleEditor from '@/components/ArticleEditor.vue'
 import { onBeforeMount, ref } from 'vue'
 import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 
