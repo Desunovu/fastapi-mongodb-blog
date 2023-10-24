@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { DefaultService, type ArticleDocument } from '@/client'
+import { DefaultService, type ArticleDocumentResponse } from '@/client'
 import ArticleCard from '@/components/ArticleCard.vue'
 import CommentList from '@/components/CommentList.vue'
 import { onBeforeMount, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
-const article = ref<ArticleDocument>()
+const article = ref<ArticleDocumentResponse>()
 
 const route = useRoute()
 

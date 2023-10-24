@@ -9,6 +9,7 @@ export type { OpenAPIConfig } from './core/OpenAPI';
 
 export type { ArticleCreateOrUpdate } from './models/ArticleCreateOrUpdate';
 export type { ArticleDocument } from './models/ArticleDocument';
+export type { ArticleDocumentResponse } from './models/ArticleDocumentResponse';
 export type { ArticleGenerate } from './models/ArticleGenerate';
 export type { ArticleResponse } from './models/ArticleResponse';
 export type { ArticlesResponse } from './models/ArticlesResponse';
@@ -17,6 +18,7 @@ export type { Body_change_user_role_users__user_id__role_put } from './models/Bo
 export type { Body_login_for_access_token_token_post } from './models/Body_login_for_access_token_token_post';
 export type { CommentCreate } from './models/CommentCreate';
 export type { CommentDocument } from './models/CommentDocument';
+export type { CommentDocumentResponse } from './models/CommentDocumentResponse';
 export type { CommentResponse } from './models/CommentResponse';
 export type { CommentsResponse } from './models/CommentsResponse';
 export type { CommentsSortField } from './models/CommentsSortField';

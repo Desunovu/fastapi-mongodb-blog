@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type ArticleDocument } from '@/client'
+import { type ArticleDocumentResponse } from '@/client'
 import UserInfoCard from '@/components/UserInfoCard.vue'
 import { useUserStore } from '@/stores/UserStore'
 import moment from 'moment'
@@ -7,7 +7,7 @@ import { computed, onBeforeMount, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const props = defineProps<{
-  article: ArticleDocument | undefined
+  article: ArticleDocumentResponse | undefined
 }>()
 
 const route = useRoute()
@@ -21,7 +21,7 @@ const editLink = computed(() => {
 
 onBeforeMount(async () => {
   const currentUser = useUserStore().user
-  if (currentUser?.role == 'Admin' || props.article?.author?.id == currentUser?._id) {
+  if (currentUser?.role == 'Admin' || props.article?.author?._id == currentUser?._id) {
     isAllowedToEdit.value = true
   }
 })
@@ -39,7 +39,7 @@ onBeforeMount(async () => {
         <div class="row justify-between items-center q-mb-md">
           <!-- Аватар и имя автора -->
           <router-link
-            :to="{ name: 'user', params: { id: article?.author?.id } }"
+            :to="{ name: 'user', params: { id: article?.author?._id } }"
             class="row items-end text-h5 text-uppercase text-weight-bold text-white"
           >
             <UserInfoCard :user="article?.author" small class="q-mr-md" />

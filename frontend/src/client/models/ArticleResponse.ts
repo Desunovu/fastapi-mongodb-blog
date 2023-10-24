@@ -3,11 +3,11 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { ArticleDocument } from './ArticleDocument';
+import type { ArticleDocumentResponse } from './ArticleDocumentResponse';
 
 /**
  * Модель ответа с одной статьей
  */
 export type ArticleResponse = {
-    article: ArticleDocument;
+    article: ArticleDocumentResponse;
 };

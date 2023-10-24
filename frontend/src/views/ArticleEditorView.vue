@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { type ArticleDocument, DefaultService } from '@/client'
+import { type ArticleDocumentResponse, DefaultService } from '@/client'
 import ArticleEditor from '@/components/ArticleEditor.vue'
 import { onBeforeMount, ref } from 'vue'
 import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 
 const createMode = ref<boolean>(false)
 const editMode = ref<boolean>(false)
-const article = ref<ArticleDocument>()
+const article = ref<ArticleDocumentResponse>()
 
 const route = useRoute()
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type ArticleDocument } from '@/client'
+import { type ArticleDocumentResponse } from '@/client'
 import UserInfoCard from '@/components/UserInfoCard.vue'
 import { ref } from 'vue'
 import { onBeforeMount } from 'vue'
@@ -9,7 +9,7 @@ import moment from 'moment'
 
 const route = useRoute()
 
-const articles = ref<ArticleDocument[]>([])
+const articles = ref<ArticleDocumentResponse[]>([])
 const searchText = ref('')
 const freezedSearchText = ref('')
 const limit = ref<number>(10)

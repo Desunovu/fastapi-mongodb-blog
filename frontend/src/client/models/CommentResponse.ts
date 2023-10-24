@@ -3,8 +3,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { CommentDocument } from './CommentDocument';
+import type { CommentDocumentResponse } from './CommentDocumentResponse';
 
 export type CommentResponse = {
-    comment: CommentDocument;
+    comment: CommentDocumentResponse;
 };

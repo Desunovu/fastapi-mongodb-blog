@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { DefaultService, type ArticleDocument } from '@/client'
+import { DefaultService, type ArticleDocumentResponse } from '@/client'
 import router from '@/router'
 import { Notify } from 'quasar'
 import { ref } from 'vue'
 
 export interface Props {
-  articleToEdit?: ArticleDocument
+  articleToEdit?: ArticleDocumentResponse
   createMode?: boolean
   editMode?: boolean
 }

@@ -3,12 +3,12 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { ArticleDocument } from './ArticleDocument';
+import type { ArticleDocumentResponse } from './ArticleDocumentResponse';
 
 /**
  * Модель ответа с списком статей
  */
 export type ArticlesResponse = {
-    articles: Array<ArticleDocument>;
+    articles: Array<ArticleDocumentResponse>;
     total: number;
 };

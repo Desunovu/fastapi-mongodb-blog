@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DefaultService, type CommentDocument } from '@/client'
+import { DefaultService, type CommentDocumentResponse } from '@/client'
 import UserInfoCard from '@/components/UserInfoCard.vue'
 import moment from 'moment'
 import { onBeforeMount, ref } from 'vue'
@@ -12,7 +12,7 @@ const props = defineProps<{
 }>()
 
 // Стейт компонента
-const comments = ref<CommentDocument[]>([])
+const comments = ref<CommentDocumentResponse[]>([])
 const deletedCommentIds = ref<string[]>([])
 const skip = ref<number>(0)
 const limit = ref<number>(2)
@@ -144,12 +144,12 @@ onBeforeMount(() => {
             <div class="row justify-between items-center">
               <div class="col-grow row q-gutter-xs text-subtitle1">
                 <router-link
-                  :to="{ name: 'user', params: { id: comment.author.id } }"
+                  :to="{ name: 'user', params: { id: comment.author._id } }"
                   class="text-white"
                 >
                   @{{ 'username' in comment.author ? comment.author.username : '' }}
                 </router-link>
-                <div v-if="comment.author.id == currentUser?._id" class="text-white">(Вы)</div>
+                <div v-if="comment.author._id == currentUser?._id" class="text-white">(Вы)</div>
                 <div v-if="comment.author.role == 'Admin'" class="text-negative">Админ</div>
               </div>
               <div class="col text-right">
@@ -176,7 +176,7 @@ onBeforeMount(() => {
                 align="left"
               />
               <q-btn
-                v-if="checkUserCanModifyComment(comment.author.id)"
+                v-if="checkUserCanModifyComment(comment.author._id!)"
                 @click="comment._id && handleDeleteCommentButtonClick(comment._id)"
                 label="Удалить"
                 icon-right="clear"
@@ -211,8 +211,8 @@ onBeforeMount(() => {
           <!-- Отображение ответов на комментарий -->
           <q-item
             v-for="reply in comment.replies"
-            :key="reply.id"
-            :class="{ 'disabled-item': isCommentDisabled(reply.id) }"
+            :key="reply._id!"
+            :class="{ 'disabled-item': isCommentDisabled(reply._id!) }"
             class="row shadow-2 q-my-xs q-pa-sm"
           >
             <UserInfoCard :user="reply.author" small class="self-start q-mr-md" />
@@ -221,12 +221,12 @@ onBeforeMount(() => {
               <div class="row justify-between">
                 <div class="col-grow row q-gutter-xs text-subtitle1">
                   <router-link
-                    :to="{ name: 'user', params: { id: comment.author.id } }"
+                    :to="{ name: 'user', params: { id: comment.author._id } }"
                     class="text-white"
                   >
                     @{{ 'username' in comment.author ? comment.author.username : '' }}
                   </router-link>
-                  <div v-if="comment.author.id == currentUser?._id" class="text-white">(Вы)</div>
+                  <div v-if="comment.author._id == currentUser?._id" class="text-white">(Вы)</div>
                   <div v-if="comment.author.role == 'Admin'" class="text-negative">Админ</div>
                 </div>
                 <div class="col-stretch text-right">
@@ -244,7 +244,7 @@ onBeforeMount(() => {
               <div class="row justify-end">
                 <q-btn
                   v-if="checkUserCanModifyComment(reply.author.id)"
-                  @click="handleDeleteCommentButtonClick(reply.id)"
+                  @click="handleDeleteCommentButtonClick(reply._id!)"
                   label="Удалить"
                   icon-right="clear"
                   no-caps
