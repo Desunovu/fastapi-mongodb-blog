@@ -25,6 +25,7 @@ class CommentDocument(ExtendedDocument):
 
 class CommentDocumentResponse(CommentDocument):
     """Модель для ответа с fetch_links=True"""
+    author: UserDocument
     replies: list[CommentDocument]
 
 
