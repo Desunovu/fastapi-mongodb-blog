@@ -23,6 +23,11 @@ class CommentDocument(ExtendedDocument):
         name = "comments"
 
 
+class CommentDocumentResponse(CommentDocument):
+    """Модель для ответа с fetch_links=True"""
+    replies: list[CommentDocument]
+
+
 class CommentUpdate(BaseModel):
     """Тело запроса изменения комментария"""
 
@@ -42,11 +47,11 @@ class ReplyCreate(CommentUpdate):
 
 
 class CommentsResponse(BaseModel):
-    comments: list[CommentDocument]
+    comments: list[CommentDocumentResponse]
 
 
 class CommentResponse(BaseModel):
-    comment: CommentDocument
+    comment: CommentDocumentResponse
 
 
 class CommentsSortField(str, Enum):

@@ -30,6 +30,12 @@ class ArticleDocument(ExtendedDocument):
         ]
 
 
+class ArticleDocumentResponse(ArticleDocument):
+    """Модель для ответа с fetch_links=True"""
+
+    author: UserDocument | None = None
+
+
 class ArticleCreateOrUpdate(BaseModel):
     """Модель для создания или обновления статьи. Должно быть хотя бы одно поле не None"""
 
@@ -74,13 +80,13 @@ class ArticleCreateOrUpdate(BaseModel):
 class ArticleResponse(BaseModel):
     """Модель ответа с одной статьей"""
 
-    article: ArticleDocument
+    article: ArticleDocumentResponse
 
 
 class ArticlesResponse(BaseModel):
     """Модель ответа с списком статей"""
 
-    articles: list[ArticleDocument]
+    articles: list[ArticleDocumentResponse]
     total: int
 
 
