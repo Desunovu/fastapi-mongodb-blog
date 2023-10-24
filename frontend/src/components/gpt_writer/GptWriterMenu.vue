@@ -44,7 +44,7 @@ const handleSubmit = async () => {
     <q-form class="q-px-md q-pt-md">
       <q-input label="Заголовок" v-model="title" clearable />
       <!-- Инпут для нового тега -->
-      <q-input label="Новые теги (через запятую)" v-model="tagsString" />
+      <q-input label="Новые теги (через запятую)" v-model="tagsString" clearable />
       <!-- Инпут для новых ключевых фраз -->
       <q-input label="Новые ключевые фразы (через запятую)" v-model="keyPhrasesString" clearable />
     </q-form>
