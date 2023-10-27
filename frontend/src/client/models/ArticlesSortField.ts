@@ -3,6 +3,9 @@
 /* tslint:disable */
 /* eslint-disable */
 
+/**
+ * Поля по которым проводится сортировка
+ */
 export enum ArticlesSortField {
     CREATED_AT = 'created_at',
     TITLE = 'title',

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { DefaultService, type CommentDocument } from '@/client'
-import UserItemSection from '../users/UserItemSection.vue'
+import { DefaultService, type CommentDocumentResponse } from '@/client'
+import UserInfoCard from '@/components/UserInfoCard.vue'
 import moment from 'moment'
 import { onBeforeMount, ref } from 'vue'
 import { useUserStore } from '@/stores/UserStore'
@@ -12,7 +12,7 @@ const props = defineProps<{
 }>()
 
 // Стейт компонента
-const comments = ref<CommentDocument[]>([])
+const comments = ref<CommentDocumentResponse[]>([])
 const deletedCommentIds = ref<string[]>([])
 const skip = ref<number>(0)
 const limit = ref<number>(2)
@@ -138,12 +138,19 @@ onBeforeMount(() => {
         class="column"
       >
         <div class="row shadow-5 q-pa-xs">
-          <UserItemSection small class="self-start" />
+          <UserInfoCard :user="comment.author" small class="self-start q-mr-md" />
           <div class="col items-start">
             <!-- Информация об авторе комментария и времени его создания -->
             <div class="row justify-between items-center">
-              <div class="col-grow text-subtitle1">
-                @{{ 'username' in comment.author ? comment.author.username : '' }}
+              <div class="col-grow row q-gutter-xs text-subtitle1">
+                <router-link
+                  :to="{ name: 'user', params: { id: comment.author._id } }"
+                  class="text-white"
+                >
+                  @{{ 'username' in comment.author ? comment.author.username : '' }}
+                </router-link>
+                <div v-if="comment.author._id == currentUser?._id" class="text-white">(Вы)</div>
+                <div v-if="comment.author.role == 'Admin'" class="text-negative">Админ</div>
               </div>
               <div class="col text-right">
                 {{ comment.updated_at ? '(изменено)' : '' }}
@@ -169,8 +176,8 @@ onBeforeMount(() => {
                 align="left"
               />
               <q-btn
-                v-if="checkUserCanModifyComment(comment.author._id ?? comment.author.id)"
-                @click="handleDeleteCommentButtonClick(comment._id! ?? comment._id)"
+                v-if="checkUserCanModifyComment(comment.author._id!)"
+                @click="comment._id && handleDeleteCommentButtonClick(comment._id)"
                 label="Удалить"
                 icon-right="clear"
                 no-caps
@@ -204,15 +211,24 @@ onBeforeMount(() => {
           <!-- Отображение ответов на комментарий -->
           <q-item
             v-for="reply in comment.replies"
-            :key="reply._id ?? reply.id!"
-            :class="{ 'disabled-item': isCommentDisabled(reply._id ?? reply.id) }"
+            :key="reply._id!"
+            :class="{ 'disabled-item': isCommentDisabled(reply._id!) }"
             class="row shadow-2 q-my-xs q-pa-sm"
           >
-            <UserItemSection small class="self-start" />
+            <UserInfoCard :user="reply.author" small class="self-start q-mr-md" />
             <div class="col items-start">
               <!-- Информация об авторе ответа и времени его создания -->
               <div class="row justify-between">
-                <div class="col">@{{ reply.author?.username ?? '' }}</div>
+                <div class="col-grow row q-gutter-xs text-subtitle1">
+                  <router-link
+                    :to="{ name: 'user', params: { id: comment.author._id } }"
+                    class="text-white"
+                  >
+                    @{{ 'username' in comment.author ? comment.author.username : '' }}
+                  </router-link>
+                  <div v-if="comment.author._id == currentUser?._id" class="text-white">(Вы)</div>
+                  <div v-if="comment.author.role == 'Admin'" class="text-negative">Админ</div>
+                </div>
                 <div class="col-stretch text-right">
                   {{ comment.updated_at ? '(изменено)' : '' }}
                   {{ moment(comment.created_at).format('hh:mm DD-MM-YYYY') }}
@@ -221,14 +237,14 @@ onBeforeMount(() => {
 
               <!-- Текст ответа -->
               <div class="text-white">
-                {{ reply.content ?? '' }}
+                {{ reply.content }}
               </div>
 
               <!-- Кнопка для удаления ответа -->
               <div class="row justify-end">
                 <q-btn
-                  v-if="checkUserCanModifyComment(reply.author?._id ?? reply.author?.id!)"
-                  @click="handleDeleteCommentButtonClick(reply._id ?? reply.id)"
+                  v-if="checkUserCanModifyComment(reply.author.id)"
+                  @click="handleDeleteCommentButtonClick(reply._id!)"
                   label="Удалить"
                   icon-right="clear"
                   no-caps

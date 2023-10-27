@@ -5,6 +5,7 @@ from beanie.odm.enums import SortDirection
 from fastapi import APIRouter, Depends, Query, Path, HTTPException, Body
 from starlette import status
 
+from ...utils.avatar import is_valid_avatar_url
 from .models import (
     UserDocument,
     UsersResponse,
@@ -77,15 +78,18 @@ async def update_user(
     user_id: Annotated[PydanticObjectId, Path(description="UUID Пользователя")],
     user_data: UpdateUserRequest,
 ):
-    """Обновляет пользователя по id"""
+    """Обновляет данные пользователя по id"""
 
-    user = await UserDocument.update_document_by_id(
+    if not is_valid_avatar_url(user_data.avatar_url):
+        raise HTTPException(status_code=400, detail="Неверный формат URL аватара")
+
+    updated_user = await UserDocument.update_document_by_id(
         document_id=user_id,
         current_user=current_user,
         update_data=user_data,
     )
 
-    return {"user": user}
+    return {"user": updated_user}
 
 
 @router.put("/{user_id}/password")

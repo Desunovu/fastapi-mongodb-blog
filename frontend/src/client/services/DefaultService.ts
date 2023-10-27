@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { ArticleCreateOrUpdate } from '../models/ArticleCreateOrUpdate';
+import type { ArticleGenerate } from '../models/ArticleGenerate';
 import type { ArticleResponse } from '../models/ArticleResponse';
 import type { ArticlesResponse } from '../models/ArticlesResponse';
 import type { ArticlesSortField } from '../models/ArticlesSortField';
@@ -13,6 +14,7 @@ import type { CommentResponse } from '../models/CommentResponse';
 import type { CommentsResponse } from '../models/CommentsResponse';
 import type { CommentsSortField } from '../models/CommentsSortField';
 import type { CommentUpdate } from '../models/CommentUpdate';
+import type { GeneratedArticleResponse } from '../models/GeneratedArticleResponse';
 import type { RegisterRequestBody } from '../models/RegisterRequestBody';
 import type { ReplyCreate } from '../models/ReplyCreate';
 import type { SortDirection } from '../models/SortDirection';
@@ -392,7 +394,7 @@ userId: string,
 
     /**
      * Update User
-     * Обновляет пользователя по id
+     * Обновляет данные пользователя по id
      * @param userId UUID Пользователя
      * @param requestBody 
      * @returns UserResponse Successful Response
@@ -482,6 +484,27 @@ requestBody: Body_change_user_role_users__user_id__role_put,
             path: {
                 'user_id': userId,
             },
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Generate Article
+     * Генерирует статью с помощью gpt-модели
+     * @param requestBody 
+     * @returns GeneratedArticleResponse Successful Response
+     * @throws ApiError
+     */
+    public static generateArticleGptWriterPost(
+requestBody: ArticleGenerate,
+): CancelablePromise<GeneratedArticleResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/gpt-writer/',
             body: requestBody,
             mediaType: 'application/json',
             errors: {

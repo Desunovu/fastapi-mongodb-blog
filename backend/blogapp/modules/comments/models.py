@@ -15,13 +15,18 @@ class CommentDocument(ExtendedDocument):
     disabled: bool = False
     is_reply: bool = False
     article: Link[ArticleDocument] | None = Field(None, exclude=True)
-    # TODO Вернуть Optional None к replies после выхода исправления бага fetch в beanie
     replies: list[Link["CommentDocument"]] = []
     created_at: datetime | None = None
     updated_at: datetime | None = None
 
     class Settings:
         name = "comments"
+
+
+class CommentDocumentResponse(CommentDocument):
+    """Модель для ответа с fetch_links=True"""
+    author: UserDocument
+    replies: list[CommentDocument]
 
 
 class CommentUpdate(BaseModel):
@@ -43,11 +48,11 @@ class ReplyCreate(CommentUpdate):
 
 
 class CommentsResponse(BaseModel):
-    comments: list[CommentDocument]
+    comments: list[CommentDocumentResponse]
 
 
 class CommentResponse(BaseModel):
-    comment: CommentDocument
+    comment: CommentDocumentResponse
 
 
 class CommentsSortField(str, Enum):

@@ -79,13 +79,14 @@ class ExtendedDocument(Document):
         # Проверка прав редактирования
         document.check_user_can_modify_document(current_user)
         # Удаление ссылок
-        for field_name in link_fields_to_delete:
-            document_field_to_delete = getattr(document, field_name, None)
-            if isinstance(document_field_to_delete, list):
-                for link in document_field_to_delete:
-                    await link.delete()
-            elif isinstance(document_field_to_delete, ExtendedDocument):
-                await document_field_to_delete.delete()
+        if link_fields_to_delete:
+            for field_name in link_fields_to_delete:
+                document_field_to_delete = getattr(document, field_name, None)
+                if isinstance(document_field_to_delete, list):
+                    for link in document_field_to_delete:
+                        await link.delete()
+                elif isinstance(document_field_to_delete, ExtendedDocument):
+                    await document_field_to_delete.delete()
         # Удаление документа
         delete_result = await document.delete()
 

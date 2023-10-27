@@ -25,9 +25,6 @@ router = APIRouter(prefix="/comments")
 
 @router.get("/", response_model=CommentsResponse)
 async def list_comments(
-    _current_user: Annotated[
-        UserDocument, Depends(RoleChecker(allowed_role=RolesEnum.READER.value))
-    ],
     article_id: PydanticObjectId,
     skip: Annotated[int | None, Query(ge=0)] = None,  # >= 0
     limit: Annotated[int | None, Query(ge=1)] = None,  # >= 1
@@ -41,7 +38,6 @@ async def list_comments(
     comments = (
         await CommentDocument.find(
             CommentDocument.article.id == article_id,
-            # TODO FIX BUG с fetch в версии beanie 1.21
             fetch_links=True,
         )
         .sort((sort_by, sort_order))
@@ -67,7 +63,6 @@ async def create_comment(
     comment = CommentDocument(
         author=current_user,
         article=article,
-        replies=[],
         created_at=datetime.utcnow(),
         **comment_data.model_dump(),
     )

@@ -16,6 +16,7 @@ class UserBase(ABC, BaseModel):
     created_at: datetime | None
     updated_at: datetime | None
     password_hash: str | None
+    avatar_url: str | None
 
 
 class TokenResponseBody(BaseModel):

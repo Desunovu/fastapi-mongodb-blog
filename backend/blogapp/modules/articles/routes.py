@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 from typing import Annotated
 
@@ -19,13 +20,11 @@ from ...core.security.roles import RolesEnum
 from ...core.security.utilities import RoleChecker
 
 router = APIRouter(prefix="/articles")
+log = logging.getLogger("blogapp")
 
 
 @router.get("/", response_model=ArticlesResponse)
 async def list_articles(
-    _current_user: Annotated[
-        UserDocument, Depends(RoleChecker(allowed_role=RolesEnum.READER.value))
-    ],
     skip: Annotated[int | None, Query(ge=0)] = None,  # >= 0
     limit: Annotated[int | None, Query(ge=1)] = None,  # >= 1
     sort_by: Annotated[ArticlesSortField, Query()] = ArticlesSortField.created_at.value,
@@ -38,21 +37,26 @@ async def list_articles(
     """Возвращает список статей."""
 
     # Базовый запрос
-    query = ArticleDocument.find()
+    query = ArticleDocument.find(fetch_links=True)
     # Поиск по текстовому запросу
     if search_query:
-        query = query.find(Text(search_query))
+        query = query.find(Text(search_query), fetch_links=True)
     # Поиск по тегу
     if tag:
-        query = query.find(All(ArticleDocument.tags, [tag]))
+        query = query.find(All(ArticleDocument.tags, [tag]), fetch_links=True)
+    # Получение количества найденных документов
+    # TODO Убрать костыль при исправлении Beanie (баг .count() после Text search v1.23)
+    try:
+        total = await query.count()
+    except Exception as e:
+        log.error(str(e))
+        total = (await query.to_list()).__len__()
     # Сортировка, пагинация
     query = query.sort((sort_by, sort_order)).skip(n=skip).limit(n=limit)
-    # TODO Исправить fetch_links после выхода патча [баг версии 1.21.0]
-    # query = query.find(fetch_links=True)
     # Получение списка статей
     articles = await query.to_list(length=None)
 
-    return {"articles": articles}
+    return {"articles": articles, "total": total}
 
 
 @router.post("/", response_model=ArticleResponse)
@@ -78,16 +82,11 @@ async def create_article(
 @router.get("/{article_id}", response_model=ArticleResponse)
 async def read_article(
     article_id: PydanticObjectId,
-    current_user: Annotated[
-        UserDocument, Depends(RoleChecker(allowed_role=RolesEnum.READER.value))
-    ],
 ):
     """Возвращает статью по ее uuid."""
 
     # Получение данных
-    article = await ArticleDocument.get_or_404(
-        document_id=article_id, fetch_links=False
-    )
+    article = await ArticleDocument.get_or_404(document_id=article_id, fetch_links=True)
     return {"article": article}
 
 

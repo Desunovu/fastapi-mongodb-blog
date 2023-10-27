@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import LoginForm from '@/components/LoginForm.vue'
+import UserList from '@/components/UserList.vue'
 </script>
 
 <template>
   <q-page padding>
-    <LoginForm />
+    <UserList />
   </q-page>
 </template>
