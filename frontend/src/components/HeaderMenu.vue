@@ -31,6 +31,7 @@ const props = defineProps<{ currentUser?: UserDocument }>()
       </div>
       <!-- Блок для всех пользователей -->
       <q-btn :to="{ name: 'home' }" stretch flat label="Все статьи" />
+      <q-btn :to="{name: 'users'}" stretch flat label="Пользователи" />
       <q-btn :to="{ name: 'profile' }" stretch flat>{{ currentUser.username }}</q-btn>
       <q-btn :to="{ name: 'logout' }" stretch flat label="Выйти" />
     </div>

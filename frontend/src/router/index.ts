@@ -5,6 +5,7 @@ import ArticleListView from '@/views/ArticleListView.vue'
 import AuthLogoutView from '@/views/AuthLogoutView.vue'
 import ArticleCardView from '@/views/ArticleCardView.vue'
 import UserView from '@/views/UserView.vue'
+import UserListView from '@/views/UserListView.vue'
 import ArticleEditorView from '@/views/ArticleEditorView.vue'
 import PathNotFoundView from '@/views/PathNotFoundView.vue'
 import GptWriterView from '@/views/GptWriterView.vue'
@@ -24,6 +25,7 @@ const router = createRouter({
     //GPT-WRITER
     { path: '/gpt-writer', name: 'gpt-writer', component: GptWriterView },
     // USERS
+    { path: '/users', name: 'users', component: UserListView },
     { path: '/user/:id', name: 'user', component: UserView },
     { path: '/profile', name: 'profile', component: UserView },
     // NOT FOUND
