@@ -1,3 +1,5 @@
+# API routes
+![](api-routes.png)
 # Homepage
 ![](homepage.png)
 # Register page
