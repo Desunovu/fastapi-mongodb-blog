@@ -45,7 +45,7 @@ async def startup():
 
     if FASTAPI_CHATGPT_API_KEY:
         Writer.init_writer(FASTAPI_CHATGPT_ALTERNATIVE_BASE, FASTAPI_CHATGPT_API_KEY)
-        log.info("Инициализация ChatGPT завершена")
+        log.info("Инициализация GPT API завершена")
 
     log.info("Выполнены подготовительные задачи при старте FastAPI")
 

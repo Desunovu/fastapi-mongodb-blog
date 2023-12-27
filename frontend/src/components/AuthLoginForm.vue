@@ -1,14 +1,20 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import AuthService from '@/services/AuthService'
 
 // reactive state
 const username = ref('')
 const password = ref('')
+const isDevMode = ref(false)
 
 async function handleSubmit() {
   await AuthService.login(username.value, password.value)
 }
+
+onMounted(() => {
+  isDevMode.value = import.meta.env.MODE === 'development'
+  console.log('isDevMode', import.meta.env.MODE)
+})
 </script>
 
 <template>
@@ -45,6 +51,19 @@ async function handleSubmit() {
           class="full-width text-white"
           label="Войти"
       /></q-card-actions>
+
+      <div v-if="isDevMode" class="q-mt-lg">
+        <!-- Подсказка в режиме разработки: Пароли и логины аккаунтов администратор, автор, читатель -->
+        <div class="text-h6 q-mb-xs">Аккаунты для тестирования</div>
+        <!-- Список quasar -->
+        <q-list>
+          <q-item v-for="user in ['admin', 'author', 'reader']" :key="user" dense>
+            <q-item-section>
+              <q-item-label>{{ user }}:{{ user }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </div>
     </q-form>
   </q-card>
 </template>

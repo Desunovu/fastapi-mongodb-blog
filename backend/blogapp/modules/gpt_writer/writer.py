@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 
 import langdetect
 import openai
@@ -14,30 +15,27 @@ log = logging.getLogger("blogapp")
 class Writer:
     """Класс работы с ChatGPT"""
 
-    service_name: str
     settings: dict
 
     @classmethod
     def init_writer(cls, host: str, api_key: str):
         """
-        Инициализация Writer. Подготавливает openai и получает настройки из .yml
-        :param host: сервер API. Если пустой, то будет использован стандартный OpenAI.
-        :param api_key: API ключ требуется только для OpenAI.
+        Инициализация Writer. Подготавливает библиотеку openai и получает настройки из .yml
+        :param host: сервер API. Если пустой, то будет использован стандартный ендпоинт OpenAI.
+        :param api_key: API ключ.
         """
 
-        cls.service_name = "unknown"
-
-        if host == "" or host == "https://api.openai.com/v1":
-            openai.api_key = api_key
-        if host == "https://neuroapi.host/v1":
-            cls.service_name = "neuroapi"
+        # Конфигурация Host и API ключа в openai
+        if not (host == "" or host == "https://api.openai.com/v1"):
             openai.api_base = host
-            openai.api_key = "filledKey"
+        openai.api_key = api_key
 
-        with open(BACKEND_DIR_PATH / "blogapp" / "modules" / "gpt_writer" / "chatgpt_settings.yml", "r", encoding="utf-8") as file:
+        # Загрузка настроек для промптов
+        settings_path = Path(
+            BACKEND_DIR_PATH, "blogapp", "modules", "gpt_writer", "chatgpt_settings.yml"
+        )
+        with open(settings_path, "r", encoding="utf-8") as file:
             cls.settings = yaml.safe_load(file)
-
-        log.debug(f"Инициализирован Writer для {openai.api_base}")
 
     @classmethod
     def prepare_article_generation_prompt(

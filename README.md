@@ -3,6 +3,8 @@
 ## Introduction
 
 This project is an educational project for developing a blog using Fast API, Vue.js and MongoDB. The main goal of the project is to demonstrate the use of a NoSQL database and asynchronous CRUD operations.
+![homepage](/demo-assets/homepage.png)
+[The rest of the demo screenshots](demo-assets/screenshots.md)
 
 ## Technology Stack
 
